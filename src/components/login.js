@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useFormValue } from "../hooks/useFormValue";
 import { useDispatch } from "react-redux";
 import { login } from "../thunks/auth";
 import Avatar from '@material-ui/core/Avatar';
@@ -37,18 +38,10 @@ const useStyles = makeStyles((theme) => ({
 function Login() {
     const classes = useStyles();
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, handleOnEmailChange] = useFormValue('');
+    const [password, handleOnPasswordChange] = useFormValue('');
 
     const dispatch = useDispatch();
-
-    function handleOnEmailChange(event) {
-        setEmail(event.target.value);
-    }
-
-    function handleOnPasswordChange(event) {
-        setPassword(event.target.value);
-    }
 
     function handleOnSignInClick(event) {
         event.preventDefault();

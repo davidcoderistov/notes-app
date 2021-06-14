@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useFormValue } from "../hooks/useFormValue";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -35,16 +36,8 @@ const useStyles = makeStyles((theme) => ({
 function Signup() {
     const classes = useStyles();
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
-    function handleOnEmailChange(event) {
-        setEmail(event.target.value);
-    }
-
-    function handleOnPasswordChange(event) {
-        setPassword(event.target.value);
-    }
+    const [email, handleOnEmailChange] = useFormValue('');
+    const [password, handleOnPasswordChange] = useFormValue('');
 
     function handleOnSignInClick(event) {
         event.preventDefault();
