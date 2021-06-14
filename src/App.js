@@ -1,5 +1,5 @@
 import React from "react";
-import { Login } from "./components/login";
+import { Signup } from "./components/signup";
 import { Grid } from "@material-ui/core";
 import { useSelector } from "react-redux";
 import { getAuth } from "./selectors";
@@ -14,7 +14,7 @@ function App() {
           justify="center"
           alignItems="center"
       >
-        <Login/>
+        <Signup/>
       </Grid>
   );
 }

@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { useDispatch } from "react-redux";
-import { login } from "../thunks/auth";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -34,13 +32,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function Login() {
+function Signup() {
     const classes = useStyles();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
-    const dispatch = useDispatch();
 
     function handleOnEmailChange(event) {
         setEmail(event.target.value);
@@ -53,7 +49,7 @@ function Login() {
     function handleOnSignInClick(event) {
         event.preventDefault();
         event.stopPropagation();
-        dispatch(login({email, password}));
+
     }
 
     return (
@@ -64,7 +60,7 @@ function Login() {
                     <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Sign in
+                    Sign up
                 </Typography>
                 <form className={classes.form} noValidate>
                     <TextField
@@ -101,17 +97,12 @@ function Login() {
                         className={classes.submit}
                         onClick={handleOnSignInClick}
                     >
-                        Sign In
+                        Sign Up
                     </Button>
                     <Grid container>
                         <Grid item xs>
                             <Link href="#" variant="body2">
-                                Forgot password?
-                            </Link>
-                        </Grid>
-                        <Grid item>
-                            <Link href="#" variant="body2">
-                                {"Don't have an account? Sign Up"}
+                                {"Already have an account? Sign in"}
                             </Link>
                         </Grid>
                     </Grid>
@@ -124,4 +115,4 @@ function Login() {
     );
 }
 
-export { Login }
+export { Signup }
