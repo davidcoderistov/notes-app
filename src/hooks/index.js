@@ -5,7 +5,13 @@ const useFormValue = (initialValue) => {
     const [value, setValue] = useState(initialValue);
 
     const handleOnValueChange = event => {
-        setValue(event.target.value);
+        let fieldValue = '';
+        if(event && event.target) {
+            fieldValue = event.target.value;
+        } else if(event) {
+            fieldValue = event;
+        }
+        setValue(fieldValue);
     };
 
     return [value, handleOnValueChange]

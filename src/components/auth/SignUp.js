@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useFormValue } from "../../hooks";
+import { authAPI } from "../../api/auth";
 import {
     NotesTextField,
     NotesButton,
@@ -38,15 +39,32 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function SignUp() {
+function SignUp(props) {
+    const { onSignUpSuccess } = props;
     const classes = useStyles();
 
     const [email, handleOnEmailChange] = useFormValue('');
     const [password, handleOnPasswordChange] = useFormValue('');
+    const [loading, setLoading] = useState(false);
+
+    function clearState() {
+        setLoading(false);
+        handleOnEmailChange('');
+        handleOnPasswordChange('');
+    }
 
     function handleOnSignUpClick(event) {
         event.preventDefault();
         event.stopPropagation();
+        setLoading(true);
+        authAPI.signup(email, password)
+            .then(() => {
+                clearState();
+                if(onSignUpSuccess) {
+                    onSignUpSuccess();
+                }
+            })
+            .catch(clearState)
     }
 
     return (
@@ -81,6 +99,7 @@ function SignUp() {
                         variant="contained"
                         color="primary"
                         className={classes.submit}
+                        loading={loading}
                         onClick={handleOnSignUpClick}
                     >
                         Sign Up
