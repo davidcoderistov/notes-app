@@ -1,17 +1,18 @@
 import React from 'react';
-import { useFormValue } from "../hooks/useFormValue";
+import { useFormValue } from "../../hooks";
+import NotesTextField from "../common/NotesTextField";
+import Copyright from "../common/Copyright";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Copyright from "./copyright";
+import { makeStyles } from '@material-ui/core/styles';
+
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -33,13 +34,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function Signup() {
+function SignUp() {
     const classes = useStyles();
 
     const [email, handleOnEmailChange] = useFormValue('');
     const [password, handleOnPasswordChange] = useFormValue('');
 
-    function handleOnSignInClick(event) {
+    function handleOnSignUpClick(event) {
         event.preventDefault();
         event.stopPropagation();
 
@@ -56,31 +57,20 @@ function Signup() {
                     Sign up
                 </Typography>
                 <form className={classes.form} noValidate>
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="email"
+                    <NotesTextField
+                        value={email}
+                        onValueChange={handleOnEmailChange}
                         label="Email Address"
                         name="email"
                         autoComplete="email"
-                        autoFocus
-                        value={email}
-                        onChange={handleOnEmailChange}
                     />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
+                    <NotesTextField
                         value={password}
-                        onChange={handleOnPasswordChange}
+                        onValueChange={handleOnPasswordChange}
+                        label="Password"
+                        name="password"
+                        autoComplete="current-password"
+                        type="password"
                     />
                     <Button
                         type="submit"
@@ -88,7 +78,7 @@ function Signup() {
                         variant="contained"
                         color="primary"
                         className={classes.submit}
-                        onClick={handleOnSignInClick}
+                        onClick={handleOnSignUpClick}
                     >
                         Sign Up
                     </Button>
@@ -108,4 +98,4 @@ function Signup() {
     );
 }
 
-export { Signup }
+export default SignUp
