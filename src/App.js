@@ -1,5 +1,5 @@
 import React from "react";
-import SignUp from "./components/auth/SignUp";
+import { SignUp } from "./components/auth";
 import { Grid } from "@material-ui/core";
 
 function App() {

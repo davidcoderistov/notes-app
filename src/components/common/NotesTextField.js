@@ -30,4 +30,4 @@ function NotesTextField(props) {
     )
 }
 
-export default NotesTextField
+export { NotesTextField }

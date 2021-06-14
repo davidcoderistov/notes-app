@@ -2,17 +2,21 @@ import React from 'react';
 import { useFormValue } from "../../hooks";
 import { useDispatch } from "react-redux";
 import { login } from "../../thunks/auth";
-import NotesTextField from "../common/NotesTextField";
-import Copyright from "../common/Copyright";
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import Link from '@material-ui/core/Link';
+import {
+    NotesTextField,
+    NotesButton,
+    Copyright
+} from "../common";
+import {
+    Avatar,
+    Container,
+    Grid,
+    Box,
+    Link,
+    Typography,
+    CssBaseline
+} from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -75,7 +79,7 @@ function Login() {
                         autoComplete="current-password"
                         type="password"
                     />
-                    <Button
+                    <NotesButton
                         type="submit"
                         fullWidth
                         variant="contained"
@@ -84,7 +88,7 @@ function Login() {
                         onClick={handleOnSignInClick}
                     >
                         Sign In
-                    </Button>
+                    </NotesButton>
                     <Grid container>
                         <Grid item xs>
                             <Link href="#" variant="body2">
@@ -106,4 +110,4 @@ function Login() {
     );
 }
 
-export default Login
+export { Login }

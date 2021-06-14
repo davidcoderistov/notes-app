@@ -1,16 +1,20 @@
 import React from 'react';
 import { useFormValue } from "../../hooks";
-import NotesTextField from "../common/NotesTextField";
-import Copyright from "../common/Copyright";
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
+import {
+    NotesTextField,
+    NotesButton,
+    Copyright
+} from "../common";
+import {
+    Avatar,
+    Grid,
+    Link,
+    Box,
+    Container,
+    Typography,
+    CssBaseline
+} from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 
 
@@ -43,7 +47,6 @@ function SignUp() {
     function handleOnSignUpClick(event) {
         event.preventDefault();
         event.stopPropagation();
-
     }
 
     return (
@@ -72,7 +75,7 @@ function SignUp() {
                         autoComplete="current-password"
                         type="password"
                     />
-                    <Button
+                    <NotesButton
                         type="submit"
                         fullWidth
                         variant="contained"
@@ -81,7 +84,7 @@ function SignUp() {
                         onClick={handleOnSignUpClick}
                     >
                         Sign Up
-                    </Button>
+                    </NotesButton>
                     <Grid container>
                         <Grid item xs>
                             <Link href="#" variant="body2">
@@ -98,4 +101,4 @@ function SignUp() {
     );
 }
 
-export default SignUp
+export { SignUp }
