@@ -6,10 +6,10 @@ import {
     NotesButton,
     Copyright
 } from "../common";
+import { NotesLink } from "../router";
 import {
     Avatar,
     Grid,
-    Link,
     Box,
     Container,
     Typography,
@@ -106,9 +106,9 @@ function SignUp(props) {
                     </NotesButton>
                     <Grid container>
                         <Grid item xs>
-                            <Link href="#" variant="body2">
+                            <NotesLink to="/login">
                                 {"Already have an account? Sign in"}
-                            </Link>
+                            </NotesLink>
                         </Grid>
                     </Grid>
                 </form>

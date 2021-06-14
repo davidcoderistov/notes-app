@@ -7,12 +7,12 @@ import {
     NotesButton,
     Copyright
 } from "../common";
+import { NotesLink } from "../router";
 import {
     Avatar,
     Container,
     Grid,
     Box,
-    Link,
     Typography,
     CssBaseline
 } from '@material-ui/core';
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     },
     avatar: {
         margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
+        backgroundColor: theme.palette.primary.main,
     },
     form: {
         width: '100%', // Fix IE 11 issue.
@@ -91,14 +91,14 @@ function Login() {
                     </NotesButton>
                     <Grid container>
                         <Grid item xs>
-                            <Link href="#" variant="body2">
-                                Forgot password?
-                            </Link>
+                            <NotesLink to="/">
+                                {"Forgot password?"}
+                            </NotesLink>
                         </Grid>
                         <Grid item>
-                            <Link href="#" variant="body2">
+                            <NotesLink to="/signup">
                                 {"Don't have an account? Sign Up"}
-                            </Link>
+                            </NotesLink>
                         </Grid>
                     </Grid>
                 </form>
