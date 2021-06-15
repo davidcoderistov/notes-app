@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useFormValue } from "../../hooks";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useLocation } from "react-router-dom";
 import { login } from "../../thunks/auth";
+import { getAuth } from "../../selectors";
 import {
     NotesTextField,
     NotesButton,
@@ -45,13 +47,24 @@ function Login() {
     const [email, handleOnEmailChange] = useFormValue('');
     const [password, handleOnPasswordChange] = useFormValue('');
 
+    const auth = useSelector(getAuth);
     const dispatch = useDispatch();
+    const location = useLocation();
+    const history = useHistory();
+
+    const { from } = location.state || { from: { pathname: '/' }};
 
     function handleOnSignInClick(event) {
         event.preventDefault();
         event.stopPropagation();
         dispatch(login({email, password}));
     }
+
+    useEffect(() => {
+        if(auth.isAuthenticated) {
+            history.replace(from);
+        }
+    }, [history, from, auth.isAuthenticated]);
 
     return (
         <Container component="main" maxWidth="xs">
@@ -86,6 +99,7 @@ function Login() {
                         color="primary"
                         className={classes.submit}
                         onClick={handleOnSignInClick}
+                        loading={auth.loading}
                     >
                         Sign In
                     </NotesButton>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from "react-router-dom";
 import { useFormValue } from "../../hooks";
 import { authAPI } from "../../api/auth";
 import {
@@ -39,13 +40,15 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function SignUp(props) {
-    const { onSignUpSuccess } = props;
+function SignUp() {
     const classes = useStyles();
 
     const [email, handleOnEmailChange] = useFormValue('');
     const [password, handleOnPasswordChange] = useFormValue('');
+
     const [loading, setLoading] = useState(false);
+
+    const history = useHistory();
 
     function clearState() {
         setLoading(false);
@@ -60,9 +63,7 @@ function SignUp(props) {
         authAPI.signup(email, password)
             .then(() => {
                 clearState();
-                if(onSignUpSuccess) {
-                    onSignUpSuccess();
-                }
+                history.push('/login');
             })
             .catch(clearState)
     }

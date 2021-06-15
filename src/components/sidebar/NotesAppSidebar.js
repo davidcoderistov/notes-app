@@ -150,13 +150,13 @@ function NotesAppSidebar({children}) {
                 <Divider />
                 <List style={{ color: 'rgb(208,208,208)' }}>
                     <div>
-                        <NotesTabLink to="/login" title="Notes">
+                        <NotesTabLink to="/notes" title="Notes">
                             <NotesIcon/>
                         </NotesTabLink>
-                        <NotesTabLink to="/login" title="Favorites">
+                        <NotesTabLink to="/favorites" title="Favorites">
                             <StarIcon/>
                         </NotesTabLink>
-                        <NotesTabLink to="/login" title="Trash">
+                        <NotesTabLink to="/trash" title="Trash">
                             <DeleteIcon/>
                         </NotesTabLink>
                     </div>
