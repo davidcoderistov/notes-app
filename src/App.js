@@ -3,6 +3,7 @@ import {
     Login,
     SignUp
 } from "./components/auth";
+import { PrivateRoute } from "./components/router";
 import { Grid } from "@material-ui/core";
 import {
     BrowserRouter as Router,
@@ -15,16 +16,6 @@ function App() {
       <Router>
           <React.Fragment>
               <Switch>
-                  <Route path="/" exact>
-                      <Grid
-                          container
-                          direction="row"
-                          justify="center"
-                          alignItems="center"
-                      >
-                          <Login/>
-                      </Grid>
-                  </Route>
                   <Route path="/login">
                       <Grid
                           container
@@ -45,6 +36,18 @@ function App() {
                           <SignUp/>
                       </Grid>
                   </Route>
+                  <PrivateRoute path="/notes">
+                      <p>Notes</p>
+                  </PrivateRoute>
+                  <PrivateRoute path="/favorites">
+                      <p>Favorites</p>
+                  </PrivateRoute>
+                  <PrivateRoute path="/trash">
+                      <p>Trash</p>
+                  </PrivateRoute>
+                  <PrivateRoute path="/">
+                      <p>Notes</p>
+                  </PrivateRoute>
               </Switch>
           </React.Fragment>
       </Router>

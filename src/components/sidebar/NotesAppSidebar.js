@@ -105,7 +105,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function NotesAppSidebar() {
+function NotesAppSidebar({children}) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
     const handleDrawerOpen = () => {
@@ -168,7 +168,7 @@ function NotesAppSidebar() {
                     <Grid container spacing={3}>
                         <Grid item xs={12} md={12} lg={12}>
                             <Paper className={fixedHeightPaper}>
-
+                                {children}
                             </Paper>
                         </Grid>
                     </Grid>
