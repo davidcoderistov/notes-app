@@ -3,6 +3,7 @@ import {
     Login,
     SignUp
 } from "./components/auth";
+import { NotesList } from "./components/notes";
 import { PrivateRoute } from "./components/router";
 import { Grid } from "@material-ui/core";
 import {
@@ -37,7 +38,7 @@ function App() {
                       </Grid>
                   </Route>
                   <PrivateRoute path="/notes">
-                      <p>Notes</p>
+                      <NotesList/>
                   </PrivateRoute>
                   <PrivateRoute path="/favorites">
                       <p>Favorites</p>

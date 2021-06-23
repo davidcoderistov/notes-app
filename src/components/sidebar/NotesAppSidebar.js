@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
-import Box from '@material-ui/core/Box';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
@@ -19,7 +18,6 @@ import NotesIcon from '@material-ui/icons/Notes';
 import StarIcon from '@material-ui/icons/Star';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { NotesTabLink } from "./NotesTabLink";
-import { Copyright } from "../common";
 
 
 const drawerWidth = 240;
@@ -89,6 +87,7 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         height: '100vh',
         overflow: 'auto',
+        backgroundColor: 'rgb(45,45,45)',
     },
     container: {
         paddingTop: theme.spacing(4),
@@ -98,10 +97,10 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2),
         display: 'flex',
         overflow: 'auto',
-        flexDirection: 'column',
+        flexDirection: 'row',
     },
     fixedHeight: {
-        height: 560,
+        height: 620,
     }
 }));
 
@@ -172,9 +171,6 @@ function NotesAppSidebar({children}) {
                             </Paper>
                         </Grid>
                     </Grid>
-                    <Box pt={4}>
-                        <Copyright />
-                    </Box>
                 </Container>
             </main>
         </div>
