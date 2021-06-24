@@ -4,7 +4,7 @@ import { login } from "../thunks/auth";
 export const initialState = {
     currentUser: {},
     isAuthenticated: false,
-    error: '',
+    error: null,
     loading: false,
 };
 
