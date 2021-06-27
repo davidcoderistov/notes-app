@@ -5,7 +5,9 @@ export const initialState = {
     all: {
         notes: [],
         loading: false,
-        error: null
+        error: null,
+        loadedToIndex: 0,
+        lastNote: null,
     },
     favorites: {
         notes: [],
@@ -29,12 +31,17 @@ const notesSlice = createSlice({
         },
 
         [fetchMoreNotes.fulfilled]: (state, { payload }) => {
-            state.all.notes = payload;
+            const { notes, lastNote } = payload;
+            state.all.notes = [...state.all.notes, ...notes];
+            state.all.lastNote = lastNote;
+            state.all.loadedToIndex = state.all.loadedToIndex + notes.length;
             state.all.loading = false;
         },
 
-        [fetchMoreNotes.rejected]: (state, { error }) => {
+        [fetchMoreNotes.rejected]: (state, { payload }) => {
+            const { error, pageSize } = payload;
             state.all.error = error;
+            state.all.loadedToIndex = state.all.loadedToIndex + pageSize;
             state.all.loading = false;
         },
     }

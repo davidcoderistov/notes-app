@@ -11,7 +11,7 @@ function PrivateRoute({children, ...rest}) {
 
     return (
         <Route {...rest}>
-            {auth.isAuthenticated ? (
+            {!auth.isAuthenticated ? (
                 <NotesAppSidebar>
                     {children}
                 </NotesAppSidebar>

@@ -10,27 +10,19 @@ import {
 } from '@material-ui/core';
 import NotesIcon from '@material-ui/icons/Notes';
 
-const LOADING = 1;
-const LOADED = 2;
-let itemStatusMap = {};
 
-const isItemLoaded = index => !!itemStatusMap[index];
-const loadMoreItems = (startIndex, stopIndex) => {
-    for (let index = startIndex; index <= stopIndex; index++) {
-        itemStatusMap[index] = LOADING;
+function Note({ index, style, payload }) {
+    const { notes, isItemLoaded } = payload;
+    let note = notes[index];
+
+    if(!note) {
+        note = {
+            title: 'Default title',
+            content: 'Default content'
+        }
     }
-    return new Promise(resolve =>
-        setTimeout(() => {
-            for (let index = startIndex; index <= stopIndex; index++) {
-                itemStatusMap[index] = LOADED;
-            }
-            resolve();
-        }, 2500)
-    );
-};
 
-function Note({ index, style }) {
-    const isLoading = itemStatusMap[index] === LOADING;
+    const isLoading = !isItemLoaded(index);
     return (
         <ListItem style={style} key={index}>
             { isLoading ? <CircularProgress/> : (
@@ -41,8 +33,8 @@ function Note({ index, style }) {
                         </Avatar>
                     </ListItemAvatar>
                     <ListItemText
-                        primary="Order meal and eggs and"
-                        secondary={'Secondary text'}
+                        primary={note.title}
+                        secondary={note.content}
                     />
                 </Fragment>
             )}
@@ -50,23 +42,33 @@ function Note({ index, style }) {
     );
 }
 
-function NotesList() {
+function NotesList({ loadNotes, notes, error, loading, loadedToIndex, lastNote, notesCount }) {
+    // TODO: Display different views when there is an error or initial loading
+    const loadMoreItems = (startIndex, stopIndex) => {
+        if(startIndex >= loadedToIndex) {
+            loadNotes({ startAt: lastNote ? lastNote.createdAt : startIndex, pageSize: stopIndex - startIndex + 1 });
+        }
+    };
+
+    const isItemLoaded = index => index < loadedToIndex;
+
+
     return (
         <InfiniteLoader
             isItemLoaded={isItemLoaded}
-            itemCount={1000}
+            itemCount={notesCount}
             loadMoreItems={loadMoreItems}
         >
             {({ onItemsRendered, ref }) => (
                 <List
                     height={580}
-                    itemCount={100}
+                    itemCount={notesCount}
                     itemSize={60}
                     onItemsRendered={onItemsRendered}
                     ref={ref}
                     width={300}
                 >
-                    {Note}
+                    {args => Note({...args, payload: { notes, isItemLoaded }})}
                 </List>
             )}
         </InfiniteLoader>
