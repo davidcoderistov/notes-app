@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchMoreNotes } from "../thunks/notes";
+import { loadNotes } from "../thunks/notes";
 
 export const initialState = {
     all: {
@@ -7,7 +7,6 @@ export const initialState = {
         loading: false,
         error: null,
         loadedToIndex: 0,
-        lastNote: null,
     },
     favorites: {
         notes: [],
@@ -26,19 +25,23 @@ const notesSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: {
-        [fetchMoreNotes.pending]: state => {
+        [loadNotes.pending]: state => {
             state.all.loading = true;
         },
 
-        [fetchMoreNotes.fulfilled]: (state, { payload }) => {
-            const { notes, lastNote } = payload;
-            state.all.notes = [...state.all.notes, ...notes];
-            state.all.lastNote = lastNote;
+        [loadNotes.fulfilled]: (state, { payload }) => {
+            const { notes, initialLoad } = payload;
+            if(initialLoad) {
+                state.all.notes = notes;
+                state.all.loadedToIndex = 0;
+            } else {
+                state.all.notes = [...state.all.notes, ...notes];
+            }
             state.all.loadedToIndex = state.all.loadedToIndex + notes.length;
             state.all.loading = false;
         },
 
-        [fetchMoreNotes.rejected]: (state, { payload }) => {
+        [loadNotes.rejected]: (state, { payload }) => {
             const { error, pageSize } = payload;
             state.all.error = error;
             state.all.loadedToIndex = state.all.loadedToIndex + pageSize;

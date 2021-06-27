@@ -42,11 +42,11 @@ function Note({ index, style, payload }) {
     );
 }
 
-function NotesList({ loadNotes, notes, error, loading, loadedToIndex, lastNote, notesCount }) {
+function NotesList({ loadNotes, notes, error, loading, loadedToIndex, notesCount, listKey }) {
     // TODO: Display different views when there is an error or initial loading
     const loadMoreItems = (startIndex, stopIndex) => {
         if(startIndex >= loadedToIndex) {
-            loadNotes({ startAt: lastNote ? lastNote.createdAt : startIndex, pageSize: stopIndex - startIndex + 1 });
+            loadNotes(stopIndex - startIndex + 1);
         }
     };
 
@@ -55,13 +55,14 @@ function NotesList({ loadNotes, notes, error, loading, loadedToIndex, lastNote, 
 
     return (
         <InfiniteLoader
+            key={listKey}
             isItemLoaded={isItemLoaded}
             itemCount={notesCount}
             loadMoreItems={loadMoreItems}
         >
             {({ onItemsRendered, ref }) => (
                 <List
-                    height={580}
+                    height={500}
                     itemCount={notesCount}
                     itemSize={60}
                     onItemsRendered={onItemsRendered}

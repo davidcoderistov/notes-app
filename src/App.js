@@ -47,7 +47,7 @@ function App() {
                       <p>Trash</p>
                   </PrivateRoute>
                   <PrivateRoute path="/">
-                      <p>Notes</p>
+                      <NotesView/>
                   </PrivateRoute>
               </Switch>
           </React.Fragment>

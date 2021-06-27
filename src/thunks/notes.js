@@ -1,4 +1,5 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
+import { isNonEmptyString } from "../helpers";
 import {notesAPI} from "../api/notes";
 
 function parseNote(note) {
@@ -20,22 +21,26 @@ function parseError(error) {
     }
 }
 
-const fetchMoreNotes = createAsyncThunk(
+const loadNotes = createAsyncThunk(
     'notes/fetchMoreNotes',
-    async ({ startAt, pageSize }, { rejectWithValue }) => {
+    async ({ startAt, pageSize, titleQuery = '', initialLoad = false }, { rejectWithValue }) => {
         try {
-            const querySnapshot = await notesAPI.fetchMoreNotes(startAt, pageSize);
+            let querySnapshot;
+            if(isNonEmptyString(titleQuery)) {
+                querySnapshot = await notesAPI.searchByTitle(titleQuery, startAt, pageSize);
+            } else {
+                querySnapshot = await notesAPI.loadNotes(startAt, pageSize);
+            }
             const notes = [];
             querySnapshot.forEach(doc => {
                 const note = doc.data();
                 notes.push(parseNote(note))
             });
-            const lastNote = querySnapshot.docs[querySnapshot.size - 1].data();
-            return { notes, lastNote: parseNote(lastNote) };
+            return { notes, initialLoad };
         } catch(error) {
             return rejectWithValue({ error: parseError(error), pageSize });
         }
     }
 );
 
-export { fetchMoreNotes }
+export { loadNotes }
