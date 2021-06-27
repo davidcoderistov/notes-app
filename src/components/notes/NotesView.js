@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useFormValue } from "../../hooks";
+import { makeStyles } from '@material-ui/core/styles';
 import { NotesList } from "./NotesList";
 import { NotesSearchInput } from "../common";
 import { useDispatch, useSelector} from "react-redux";
@@ -8,8 +9,16 @@ import { loadNotes } from "../../thunks/notes";
 import { notesAPI } from "../../api/notes";
 import { getAllNotes } from "../../selectors";
 
+const useStyles = makeStyles(() => ({
+    search: {
+        marginLeft: '20px',
+        marginBottom: '5px'
+    }
+}));
 
 function NotesView() {
+    const classes = useStyles();
+
     const [notesCount, setNotesCount] = useState(0);
 
     const [listKey, setListKey] = useState(1000);
@@ -53,6 +62,7 @@ function NotesView() {
     return (
         <div>
             <NotesSearchInput
+                className={classes.search}
                 value={searchText}
                 onValueChange={handleOnSearchTextChange}
                 onSearch={onSearch}

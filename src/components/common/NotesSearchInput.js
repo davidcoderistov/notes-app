@@ -13,6 +13,7 @@ function NotesSearchInput(props) {
     const {
         value,
         onValueChange,
+        className,
         onSearch
     } = props;
 
@@ -24,7 +25,7 @@ function NotesSearchInput(props) {
     };
 
     return (
-        <FormControl>
+        <FormControl className={className}>
             <InputLabel>Search by title</InputLabel>
             <Input id="search-notes"
                    type="search"

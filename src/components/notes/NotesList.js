@@ -62,7 +62,7 @@ function NotesList({ loadNotes, notes, error, loading, loadedToIndex, notesCount
         >
             {({ onItemsRendered, ref }) => (
                 <List
-                    height={500}
+                    height={530}
                     itemCount={notesCount}
                     itemSize={60}
                     onItemsRendered={onItemsRendered}
