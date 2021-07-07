@@ -15,17 +15,71 @@ function getTimestamp(date) {
 }
 
 const notesAPI = {
-    loadNotes(startAt, pageSize) {
-        return notesCollection
-            .orderBy('createdAt')
-            .startAfter(getTimestamp(startAt))
+    loadAllNotes(startAt, pageSize) {
+        let query = notesCollection
+            .orderBy('createdAt', 'desc');
+
+        if(startAt) {
+            query = query
+                .startAfter(getTimestamp(startAt));
+        }
+
+        return query
             .limit(pageSize)
             .get();
     },
-    searchByTitle(titleQuery, startAt, pageSize) {
+    loadFavoriteNotes(startAt, pageSize) {
+        let query = notesCollection
+            .where('status', '==', 'favorite')
+            .orderBy('createdAt', 'desc');
+
+        if(startAt) {
+            query = query
+                .startAfter(getTimestamp(startAt));
+        }
+
+        return query
+            .limit(pageSize)
+            .get();
+    },
+    loadTrashedNotes(startAt, pageSize) {
+        let query = notesCollection
+            .where('status', '==', 'trashed')
+            .orderBy('createdAt', 'desc');
+
+        if(startAt) {
+            query = query
+                .startAfter(getTimestamp(startAt));
+        }
+
+        return query
+            .limit(pageSize)
+            .get();
+    },
+    searchAllNotesByTitle(title, startAt, pageSize) {
         return notesCollection
-            .where('title', '>=', titleQuery)
-            .where('title', '<=', `${titleQuery}\uf8ff`)
+            .where('title', '>=', title)
+            .where('title', '<=', `${title}\uf8ff`)
+            .orderBy('title')
+            .startAfter(startAt)
+            .limit(pageSize)
+            .get();
+    },
+    searchFavoriteNotesByTitle(title, startAt, pageSize) {
+        return notesCollection
+            .where('status', '==', 'favorite')
+            .where('title', '>=', title)
+            .where('title', '<=', `${title}\uf8ff`)
+            .orderBy('title')
+            .startAfter(startAt)
+            .limit(pageSize)
+            .get();
+    },
+    searchTrashedNotesByTitle(title, startAt, pageSize) {
+        return notesCollection
+            .where('status', '==', 'trashed')
+            .where('title', '>=', title)
+            .where('title', '<=', `${title}\uf8ff`)
             .orderBy('title')
             .startAfter(startAt)
             .limit(pageSize)
@@ -34,10 +88,34 @@ const notesAPI = {
     getAllNotes() {
         return notesCollection.get();
     },
-    getAllNotesByTitle(titleQuery) {
+    getFavoriteNotes() {
         return notesCollection
-            .where('title', '>=', titleQuery)
-            .where('title', '<=', `${titleQuery}\uf8ff`)
+            .where('status', '==', 'favorite')
+            .get();
+    },
+    getTrashedNotes() {
+        return notesCollection
+            .where('status', '==', 'trashed')
+            .get();
+    },
+    getAllNotesByTitle(title) {
+        return notesCollection
+            .where('title', '>=', title)
+            .where('title', '<=', `${title}\uf8ff`)
+            .get();
+    },
+    getFavoriteNotesByTitle(title) {
+        return notesCollection
+            .where('status', '==', 'favorite')
+            .where('title', '>=', title)
+            .where('title', '<=', `${title}\uf8ff`)
+            .get();
+    },
+    getTrashedNotesByTitle(title) {
+        return notesCollection
+            .where('status', '==', 'trashed')
+            .where('title', '>=', title)
+            .where('title', '<=', `${title}\uf8ff`)
             .get();
     }
 };

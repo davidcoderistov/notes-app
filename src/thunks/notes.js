@@ -21,15 +21,15 @@ function parseError(error) {
     }
 }
 
-const loadNotes = createAsyncThunk(
-    'notes/fetchMoreNotes',
+const loadAllNotes = createAsyncThunk(
+    'notes/loadAllNotes',
     async ({ startAt, pageSize, titleQuery = '', initialLoad = false }, { rejectWithValue }) => {
         try {
             let querySnapshot;
             if(isNonEmptyString(titleQuery)) {
-                querySnapshot = await notesAPI.searchByTitle(titleQuery, startAt, pageSize);
+                querySnapshot = await notesAPI.searchAllNotesByTitle(titleQuery, startAt, pageSize);
             } else {
-                querySnapshot = await notesAPI.loadNotes(startAt, pageSize);
+                querySnapshot = await notesAPI.loadAllNotes(startAt, pageSize);
             }
             const notes = [];
             querySnapshot.forEach(doc => {
@@ -43,4 +43,49 @@ const loadNotes = createAsyncThunk(
     }
 );
 
-export { loadNotes }
+const loadFavoriteNotes = createAsyncThunk(
+    'notes/loadFavoriteNotes',
+    async ({ startAt, pageSize, titleQuery = '', initialLoad = false }, { rejectWithValue }) => {
+        try {
+            let querySnapshot;
+            if(isNonEmptyString(titleQuery)) {
+                querySnapshot = await notesAPI.searchFavoriteNotesByTitle(titleQuery, startAt, pageSize);
+            } else {
+                querySnapshot = await notesAPI.loadFavoriteNotes(startAt, pageSize);
+            }
+            const notes = [];
+            querySnapshot.forEach(doc => {
+                const note = doc.data();
+                notes.push(parseNote(note))
+            });
+            return { notes, initialLoad };
+        } catch(error) {
+            return rejectWithValue({ error: parseError(error), pageSize });
+        }
+    }
+);
+
+const loadTrashedNotes = createAsyncThunk(
+    'notes/loadTrashedNotes',
+    async ({ startAt, pageSize, titleQuery = '', initialLoad = false }, { rejectWithValue }) => {
+        try {
+            let querySnapshot;
+            if(isNonEmptyString(titleQuery)) {
+                querySnapshot = await notesAPI.searchTrashedNotesByTitle(titleQuery, startAt, pageSize);
+            } else {
+                querySnapshot = await notesAPI.loadTrashedNotes(startAt, pageSize);
+            }
+            const notes = [];
+            querySnapshot.forEach(doc => {
+                const note = doc.data();
+                notes.push(parseNote(note))
+            });
+            return { notes, initialLoad };
+        } catch(error) {
+            return rejectWithValue({ error: parseError(error), pageSize });
+        }
+    }
+);
+
+
+export { loadAllNotes, loadFavoriteNotes, loadTrashedNotes }

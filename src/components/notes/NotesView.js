@@ -5,7 +5,11 @@ import { NotesList } from "./NotesList";
 import { NotesSearchInput } from "../common";
 import { useDispatch, useSelector} from "react-redux";
 import { isNonEmptyString } from "../../helpers";
-import { loadNotes } from "../../thunks/notes";
+import {
+    loadAllNotes,
+    loadFavoriteNotes,
+    loadTrashedNotes
+} from "../../thunks/notes";
 import { notesAPI } from "../../api/notes";
 import { getAllNotes } from "../../selectors";
 
@@ -16,7 +20,7 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-function NotesView() {
+function NotesView({status}) {
     const classes = useStyles();
 
     const [notesCount, setNotesCount] = useState(0);
@@ -25,16 +29,9 @@ function NotesView() {
 
     const [searchText, handleOnSearchTextChange] = useFormValue('');
 
-    const onSearch = () => {
-        notesAPI.getAllNotesByTitle(searchText).then(querySnapshot => {
-            setListKey(listKey + 1);
-            setNotesCount(querySnapshot.size);
-            loadMoreNotes(24, true);
-        });
-    };
-
-
     const dispatch = useDispatch();
+
+    const state = useSelector(getAllNotes);
 
     const loadMoreNotes = (pageSize, initialLoad = false) => {
         const lastNote = state.notes.length > 0 ? state.notes[state.notes.length - 1] : null;
@@ -46,13 +43,40 @@ function NotesView() {
                 startAt = lastNote.createdAt;
             }
         }
-        dispatch(loadNotes({ startAt, pageSize, titleQuery: searchText, initialLoad }));
+        if(status === 'favorite') {
+            dispatch(loadFavoriteNotes({ startAt, pageSize, titleQuery: searchText, initialLoad }));
+        } else if(status === 'trashed') {
+            dispatch(loadTrashedNotes({ startAt, pageSize, titleQuery: searchText, initialLoad }));
+        } else {
+            dispatch(loadAllNotes({ startAt, pageSize, titleQuery: searchText, initialLoad }));
+        }
     };
 
-    const state = useSelector(getAllNotes);
+    const onNotesCounted = querySnapshot => {
+        setListKey(listKey + 1);
+        setNotesCount(querySnapshot.size);
+        loadMoreNotes(24, true);
+    };
+
+
+    const onSearch = () => {
+        if(status === 'favorite') {
+            notesAPI.getFavoriteNotesByTitle(searchText).then(onNotesCounted);
+        } else if(status === 'trashed') {
+            notesAPI.getTrashedNotesByTitle(searchText).then(onNotesCounted);
+        } else {
+            notesAPI.getAllNotesByTitle(searchText).then(onNotesCounted);
+        }
+    };
 
     useEffect(() => {
-        notesAPI.getAllNotes().then(querySnapshot => setNotesCount(querySnapshot.size));
+        if(status === 'favorite') {
+            notesAPI.getFavoriteNotes().then(onNotesCounted);
+        } else if(status === 'trashed') {
+            notesAPI.getTrashedNotes().then(onNotesCounted);
+        } else {
+            notesAPI.getAllNotes().then(onNotesCounted);
+        }
         return () => {
             loadMoreNotes(24, true);
         }

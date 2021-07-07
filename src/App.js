@@ -3,7 +3,11 @@ import {
     Login,
     SignUp
 } from "./components/auth";
-import { NotesView } from "./components/notes";
+import {
+    NotesPage,
+    FavoritesPage,
+    TrashPage
+} from "./pages";
 import { PrivateRoute } from "./components/router";
 import { Grid } from "@material-ui/core";
 import {
@@ -38,16 +42,16 @@ function App() {
                       </Grid>
                   </Route>
                   <PrivateRoute path="/notes">
-                      <NotesView/>
+                      <NotesPage/>
                   </PrivateRoute>
                   <PrivateRoute path="/favorites">
-                      <p>Favorites</p>
+                      <FavoritesPage/>
                   </PrivateRoute>
                   <PrivateRoute path="/trash">
-                      <p>Trash</p>
+                      <TrashPage/>
                   </PrivateRoute>
                   <PrivateRoute path="/">
-                      <NotesView/>
+                      <NotesPage/>
                   </PrivateRoute>
               </Switch>
           </React.Fragment>
