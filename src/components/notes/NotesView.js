@@ -11,7 +11,11 @@ import {
     loadTrashedNotes
 } from "../../thunks/notes";
 import { notesAPI } from "../../api/notes";
-import { getAllNotes } from "../../selectors";
+import {
+    getAllNotes,
+    getFavoriteNotes,
+    getTrashedNotes
+} from "../../selectors";
 
 const useStyles = makeStyles(() => ({
     search: {
@@ -31,7 +35,9 @@ function NotesView({status}) {
 
     const dispatch = useDispatch();
 
-    const state = useSelector(getAllNotes);
+    const state = useSelector(status === 'favorite'
+        ? getFavoriteNotes : status === 'trash'
+            ? getTrashedNotes : getAllNotes);
 
     const loadMoreNotes = (pageSize, initialLoad = false) => {
         const lastNote = state.notes.length > 0 ? state.notes[state.notes.length - 1] : null;
