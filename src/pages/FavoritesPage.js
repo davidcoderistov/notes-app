@@ -7,10 +7,27 @@ import { NotesView, NoteView } from "../components/notes";
 function FavoritesPage() {
     const selectedNote = useSelector(getSelectedFavoriteNote);
 
+    const onFavoriteClick = () => {
+        console.log('FavoritesPage/onFavoriteClick()');
+    };
+
+    const onDeleteClick = () => {
+        console.log('FavoritesPage/onDeleteClick()');
+    };
+
+    const onSyncClick = () => {
+        console.log('FavoritesPage/onSyncClick()');
+    };
+
     return (
         <Fragment>
             <NotesView status='favorite'/>
-            <NoteView note={selectedNote}/>
+            <NoteView
+                note={selectedNote}
+                onFavoriteClick={onFavoriteClick}
+                onDeleteClick={onDeleteClick}
+                onSyncClick={onSyncClick}
+            />
         </Fragment>
     );
 }

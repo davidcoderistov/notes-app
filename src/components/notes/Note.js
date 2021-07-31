@@ -25,8 +25,8 @@ function Note({title, onTitleChange, content, onContentChange}) {
                 variant="outlined"
                 fullWidth
                 multiline
-                rows="23"
-                maxrows="23"
+                rows="24"
+                maxrows="24"
                 value={content}
                 onChange={onContentChange}/>
         </Fragment>

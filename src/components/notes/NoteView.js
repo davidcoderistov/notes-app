@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Box } from "@material-ui/core";
 import { Note } from "./Note";
+import { NotesActionBar } from "../common";
 import { useFormValue } from "../../hooks";
 import { makeStyles } from "@material-ui/core";
 
@@ -10,7 +11,14 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-function NoteView({note}) {
+function NoteView(props) {
+    const {
+        note,
+        onFavoriteClick,
+        onDeleteClick,
+        onSyncClick
+    } = props;
+
     const classes = useStyles();
 
     const [title, handleOnTitleChange] = useFormValue('');
@@ -32,6 +40,11 @@ function NoteView({note}) {
                 onTitleChange={handleOnTitleChange}
                 content={content}
                 onContentChange={handleOnContentChange}
+            />
+            <NotesActionBar
+                onFavoriteClick={onFavoriteClick}
+                onDeleteClick={onDeleteClick}
+                onSyncClick={onSyncClick}
             />
         </Box>
     );
