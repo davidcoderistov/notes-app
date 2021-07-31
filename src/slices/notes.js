@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
     loadAllNotes,
     loadFavoriteNotes,
-    loadTrashedNotes
+    loadTrashedNotes,
+    markNoteAsFavorite
 } from "../thunks/notes";
 
 export const initialState = {
@@ -12,6 +13,7 @@ export const initialState = {
         error: null,
         loadedToIndex: 0,
         selectedNote: null,
+        markingNoteAsFavorite: false,
     },
     favorites: {
         notes: [],
@@ -82,6 +84,28 @@ const notesSlice = createSlice({
         [loadTrashedNotes.rejected]: (state, { payload }) => {
             onLoadNotesError(state.trash, payload);
         },
+
+        [markNoteAsFavorite.pending]: state => {
+            state.all.markingNoteAsFavorite = true;
+        },
+
+        [markNoteAsFavorite.fulfilled]: (state, { payload }) => {
+            const { noteId } = payload;
+            state.all.notes = state.all.notes.map(note => {
+                if(note.id === noteId) {
+                    return {
+                        ...note,
+                        status: 'favorite'
+                    };
+                }
+                return note;
+            });
+            state.all.markingNoteAsFavorite = false;
+        },
+
+        [markNoteAsFavorite.rejected]: state => {
+            state.all.markingNoteAsFavorite = false;
+        }
     }
 });
 

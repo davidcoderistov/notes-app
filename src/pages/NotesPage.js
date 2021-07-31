@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
+import { markNoteAsFavorite } from "../thunks/notes";
 import { getSelectedNote } from "../selectors";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { NotesView, NoteView } from "../components/notes";
 
 
@@ -8,8 +9,12 @@ import { NotesView, NoteView } from "../components/notes";
 function NotesPage() {
     const selectedNote = useSelector(getSelectedNote);
 
+    const dispatch = useDispatch();
+
     const onFavoriteClick = () => {
-        console.log('NotesPage/onFavoriteClick()');
+        if(selectedNote) {
+            dispatch(markNoteAsFavorite({ noteId: selectedNote.id }));
+        }
     };
 
     const onDeleteClick = () => {

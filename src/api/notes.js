@@ -117,6 +117,13 @@ const notesAPI = {
             .where('title', '>=', title)
             .where('title', '<=', `${title}\uf8ff`)
             .get();
+    },
+    markNoteAsFavorite(noteId) {
+        return notesCollection
+            .doc(noteId)
+            .update({
+                'status': 'favorite'
+            });
     }
 };
 
