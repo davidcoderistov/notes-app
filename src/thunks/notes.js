@@ -7,6 +7,7 @@ function parseNote(note) {
         id: note.id,
         title: note.title,
         content: note.content,
+        status: note.status,
         createdAt: {
             seconds: note.createdAt.seconds,
             nanoseconds: note.createdAt.nanoseconds

@@ -20,10 +20,10 @@ function NotesActionBar(props) {
         >
             <div>
                 <IconButton onClick={onFavoriteClick}>
-                    <StarIcon/>
+                    <StarIcon color='primary'/>
                 </IconButton>
                 <IconButton onClick={onDeleteClick}>
-                    <DeleteIcon/>
+                    <DeleteIcon color='secondary'/>
                 </IconButton>
             </div>
             <div>

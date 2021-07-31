@@ -5,11 +5,14 @@ import {
     ListItem,
     ListItemText,
     ListItemAvatar,
+    ListItemSecondaryAction,
     Avatar,
     CircularProgress
 } from '@material-ui/core';
 import { makeStyles } from "@material-ui/core";
 import NotesIcon from '@material-ui/icons/Notes';
+import StarIcon from '@material-ui/icons/Star';
+import DeleteIcon from '@material-ui/icons/HighlightOff';
 
 const useStyles = makeStyles(() => ({
     noteContainer: {
@@ -42,6 +45,16 @@ function Note({ index, style, payload }) {
                         primary={note.title}
                         secondary={note.content}
                     />
+                    { note.status === 'favorite' ? (
+                        <ListItemSecondaryAction>
+                            <StarIcon color='primary'/>
+                        </ListItemSecondaryAction>
+                    ) : null }
+                    { note.status === 'trashed' ? (
+                        <ListItemSecondaryAction>
+                            <DeleteIcon color='secondary'/>
+                        </ListItemSecondaryAction>
+                    ) : null }
                 </Fragment>
             )}
         </ListItem>
