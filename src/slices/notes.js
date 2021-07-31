@@ -4,12 +4,14 @@ import {
     loadFavoriteNotes,
     loadTrashedNotes,
     markNoteAsFavorite,
-    markNoteAsTrashed
+    markNoteAsTrashed,
+    markFavoriteNoteAsTrashed
 } from "../thunks/notes";
 
 export const initialState = {
     all: {
         notes: [],
+        totalCount: 0,
         loading: false,
         error: null,
         loadedToIndex: 0,
@@ -19,13 +21,16 @@ export const initialState = {
     },
     favorites: {
         notes: [],
+        totalCount: 0,
         loading: false,
         error: null,
         loadedToIndex: 0,
         selectedNote: null,
+        markingNoteAsTrashed: false,
     },
     trash: {
         notes: [],
+        totalCount: 0,
         loading: false,
         error: null,
         loadedToIndex: 0,
@@ -49,6 +54,18 @@ const notesSlice = createSlice({
             const { note } = payload;
             state.trash.selectedNote = note;
         },
+        setAllNotesTotalCount: (state, { payload }) => {
+            const { count } = payload;
+            state.all.totalCount = count;
+        },
+        setFavoriteNotesTotalCount: (state, { payload }) => {
+            const { count } = payload;
+            state.favorites.totalCount = count;
+        },
+        setTrashedNotesTotalCount: (state, { payload }) => {
+            const { count } = payload;
+            state.trash.totalCount = count;
+        }
     },
     extraReducers: {
         [loadAllNotes.pending]: state => {
@@ -108,12 +125,27 @@ const notesSlice = createSlice({
         [markNoteAsTrashed.fulfilled]: (state, { payload }) => {
             const { noteId } = payload;
             markNote(state.all, { noteId, status: 'trashed' });
-            state.all.markingNoteAsTrashed = true;
+            state.all.markingNoteAsTrashed = false;
         },
 
         [markNoteAsTrashed.rejected]: state => {
-            state.all.markingNoteAsTrashed = true;
-        }
+            state.all.markingNoteAsTrashed = false;
+        },
+
+        [markFavoriteNoteAsTrashed.pending]: state => {
+            state.favorites.markingNoteAsTrashed = true;
+        },
+
+        [markFavoriteNoteAsTrashed.fulfilled]: (state, { payload }) => {
+            const { noteId } = payload;
+            state.favorites.totalCount = state.favorites.totalCount - 1;
+            state.favorites.notes = state.favorites.notes.filter(note => note.id !== noteId);
+            state.favorites.markingNoteAsTrashed = false;
+        },
+
+        [markFavoriteNoteAsTrashed.rejected]: state => {
+            state.favorites.markingNoteAsTrashed = false;
+        },
     }
 });
 
@@ -157,6 +189,13 @@ function markNote(state, payload) {
     });
 }
 
-export const { setSelectedNote, setSelectedFavoriteNote, setSelectedTrashNote } = notesSlice.actions;
+export const {
+    setSelectedNote,
+    setSelectedFavoriteNote,
+    setSelectedTrashNote,
+    setAllNotesTotalCount,
+    setFavoriteNotesTotalCount,
+    setTrashedNotesTotalCount
+} = notesSlice.actions;
 
 export default notesSlice.reducer;

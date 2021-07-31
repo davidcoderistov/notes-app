@@ -8,7 +8,10 @@ import { isNonEmptyString } from "../../helpers";
 import {
     setSelectedNote,
     setSelectedFavoriteNote,
-    setSelectedTrashNote
+    setSelectedTrashNote,
+    setAllNotesTotalCount,
+    setFavoriteNotesTotalCount,
+    setTrashedNotesTotalCount
 } from "../../slices/notes";
 import {
     loadAllNotes,
@@ -19,7 +22,10 @@ import { notesAPI } from "../../api/notes";
 import {
     getAllNotes,
     getFavoriteNotes,
-    getTrashedNotes
+    getTrashedNotes,
+    getAllNotesCount,
+    getFavoriteNotesCount,
+    getTrashedNotesCount
 } from "../../selectors";
 
 const useStyles = makeStyles(() => ({
@@ -32,8 +38,6 @@ const useStyles = makeStyles(() => ({
 function NotesView({status}) {
     const classes = useStyles();
 
-    const [notesCount, setNotesCount] = useState(0);
-
     const [listKey, setListKey] = useState(1000);
 
     const [searchText, handleOnSearchTextChange] = useFormValue('');
@@ -43,6 +47,10 @@ function NotesView({status}) {
     const state = useSelector(status === 'favorite'
         ? getFavoriteNotes : status === 'trashed'
             ? getTrashedNotes : getAllNotes);
+
+    const notesCount = useSelector(status === 'favorite'
+        ? getFavoriteNotesCount : status === 'trashed'
+            ? getTrashedNotesCount : getAllNotesCount);
 
     const loadMoreNotes = (pageSize, initialLoad = false) => {
         const lastNote = state.notes.length > 0 ? state.notes[state.notes.length - 1] : null;
@@ -65,7 +73,13 @@ function NotesView({status}) {
 
     const onNotesCounted = querySnapshot => {
         setListKey(listKey + 1);
-        setNotesCount(querySnapshot.size);
+        if(status === 'favorite') {
+            dispatch(setFavoriteNotesTotalCount({ count: querySnapshot.size }));
+        } else if(status === 'trashed') {
+            dispatch(setTrashedNotesTotalCount({ count: querySnapshot.size }));
+        } else {
+            dispatch(setAllNotesTotalCount({ count: querySnapshot.size }));
+        }
         loadMoreNotes(24, true);
     };
 

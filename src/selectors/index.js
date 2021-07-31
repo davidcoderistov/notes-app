@@ -12,3 +12,9 @@ export const getSelectedNote = state => state.notes.all.selectedNote;
 export const getSelectedFavoriteNote = state => state.notes.favorites.selectedNote;
 
 export const getSelectedTrashNote = state => state.notes.trash.selectedNote;
+
+export const getAllNotesCount = state => state.notes.all.totalCount;
+
+export const getFavoriteNotesCount = state => state.notes.favorites.totalCount;
+
+export const getTrashedNotesCount = state => state.notes.trash.totalCount;

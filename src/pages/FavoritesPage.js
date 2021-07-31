@@ -1,18 +1,21 @@
 import React, { Fragment } from "react";
+import { markFavoriteNoteAsTrashed } from "../thunks/notes";
 import { getSelectedFavoriteNote } from "../selectors";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { NotesView, NoteView } from "../components/notes";
 
 
 function FavoritesPage() {
     const selectedNote = useSelector(getSelectedFavoriteNote);
 
-    const onFavoriteClick = () => {
-        console.log('FavoritesPage/onFavoriteClick()');
-    };
+    const dispatch = useDispatch();
+
+    const onFavoriteClick = () => {};
 
     const onDeleteClick = () => {
-        console.log('FavoritesPage/onDeleteClick()');
+        if(selectedNote) {
+            dispatch(markFavoriteNoteAsTrashed({ noteId: selectedNote.id }));
+        }
     };
 
     const onSyncClick = () => {
