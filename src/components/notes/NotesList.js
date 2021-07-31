@@ -8,23 +8,29 @@ import {
     Avatar,
     CircularProgress
 } from '@material-ui/core';
+import { makeStyles } from "@material-ui/core";
 import NotesIcon from '@material-ui/icons/Notes';
+
+const useStyles = makeStyles(() => ({
+    noteContainer: {
+        cursor: 'pointer'
+    }
+}));
 
 
 function Note({ index, style, payload }) {
-    const { notes, isItemLoaded } = payload;
+    const classes = useStyles();
+
+    const { notes, isItemLoaded, onNoteClick } = payload;
     let note = notes[index];
 
-    if(!note) {
-        note = {
-            title: 'Default title',
-            content: 'Default content'
-        }
-    }
+    const handleOnNoteClick = () => {
+        onNoteClick(note);
+    };
 
     const isLoading = !isItemLoaded(index);
     return (
-        <ListItem style={style} key={index}>
+        <ListItem style={style} key={index} className={classes.noteContainer} onClick={handleOnNoteClick}>
             { isLoading ? <CircularProgress/> : (
                 <Fragment>
                     <ListItemAvatar>
@@ -42,10 +48,10 @@ function Note({ index, style, payload }) {
     );
 }
 
-function NotesList({ loadNotes, notes, error, loading, loadedToIndex, notesCount, listKey }) {
+function NotesList({ loadNotes, notes, error, loading, loadedToIndex, notesCount, listKey, onNoteClick }) {
     // TODO: Display different views when there is an error or initial loading
     const loadMoreItems = (startIndex, stopIndex) => {
-        if(startIndex >= loadedToIndex) {
+        if(startIndex > 0) {
             loadNotes(stopIndex - startIndex + 1);
         }
     };
@@ -69,7 +75,7 @@ function NotesList({ loadNotes, notes, error, loading, loadedToIndex, notesCount
                     ref={ref}
                     width={300}
                 >
-                    {args => Note({...args, payload: { notes, isItemLoaded }})}
+                    {args => Note({...args, payload: { notes, isItemLoaded, onNoteClick } })}
                 </List>
             )}
         </InfiniteLoader>

@@ -1,15 +1,16 @@
 import React, { Fragment } from "react";
-import { NotesView } from "../components/notes";
+import { getSelectedFavoriteNote } from "../selectors";
+import { useSelector } from "react-redux";
+import { NotesView, NoteView } from "../components/notes";
 
 
 function FavoritesPage() {
+    const selectedNote = useSelector(getSelectedFavoriteNote);
 
     return (
         <Fragment>
             <NotesView status='favorite'/>
-            <div>
-                Favorites Page
-            </div>
+            <NoteView note={selectedNote}/>
         </Fragment>
     );
 }

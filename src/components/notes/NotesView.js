@@ -6,6 +6,11 @@ import { NotesSearchInput } from "../common";
 import { useDispatch, useSelector} from "react-redux";
 import { isNonEmptyString } from "../../helpers";
 import {
+    setSelectedNote,
+    setSelectedFavoriteNote,
+    setSelectedTrashNote
+} from "../../slices/notes";
+import {
     loadAllNotes,
     loadFavoriteNotes,
     loadTrashedNotes
@@ -36,7 +41,7 @@ function NotesView({status}) {
     const dispatch = useDispatch();
 
     const state = useSelector(status === 'favorite'
-        ? getFavoriteNotes : status === 'trash'
+        ? getFavoriteNotes : status === 'trashed'
             ? getTrashedNotes : getAllNotes);
 
     const loadMoreNotes = (pageSize, initialLoad = false) => {
@@ -75,6 +80,16 @@ function NotesView({status}) {
         }
     };
 
+    const onNoteClick = note => {
+        if(status === 'favorite') {
+            dispatch(setSelectedFavoriteNote({note}));
+        } else if(status === 'trashed') {
+            dispatch(setSelectedTrashNote({note}));
+        } else {
+            dispatch(setSelectedNote({note}));
+        }
+    };
+
     useEffect(() => {
         if(status === 'favorite') {
             notesAPI.getFavoriteNotes().then(onNotesCounted);
@@ -82,9 +97,6 @@ function NotesView({status}) {
             notesAPI.getTrashedNotes().then(onNotesCounted);
         } else {
             notesAPI.getAllNotes().then(onNotesCounted);
-        }
-        return () => {
-            loadMoreNotes(24, true);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -105,6 +117,7 @@ function NotesView({status}) {
                 notes={state.notes}
                 notesCount={notesCount}
                 loadedToIndex={state.loadedToIndex}
+                onNoteClick={onNoteClick}
             />
         </div>
     );

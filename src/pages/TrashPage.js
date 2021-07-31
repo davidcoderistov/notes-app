@@ -1,15 +1,16 @@
 import React, { Fragment } from "react";
-import { NotesView } from "../components/notes";
+import { getSelectedTrashNote } from "../selectors";
+import { useSelector } from "react-redux";
+import { NotesView, NoteView } from "../components/notes";
 
 
 function TrashPage() {
+    const selectedNote = useSelector(getSelectedTrashNote);
 
     return (
         <Fragment>
             <NotesView status='trashed'/>
-            <div>
-                Trash Page
-            </div>
+            <NoteView note={selectedNote}/>
         </Fragment>
     );
 }

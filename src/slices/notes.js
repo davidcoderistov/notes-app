@@ -11,25 +11,41 @@ export const initialState = {
         loading: false,
         error: null,
         loadedToIndex: 0,
+        selectedNote: null,
     },
     favorites: {
         notes: [],
         loading: false,
         error: null,
         loadedToIndex: 0,
+        selectedNote: null,
     },
     trash: {
         notes: [],
         loading: false,
         error: null,
         loadedToIndex: 0,
+        selectedNote: null,
     }
 };
 
 const notesSlice = createSlice({
     name: 'notes',
     initialState,
-    reducers: {},
+    reducers: {
+        setSelectedNote: (state, { payload }) => {
+            const { note } = payload;
+            state.all.selectedNote = note;
+        },
+        setSelectedFavoriteNote: (state, { payload }) => {
+            const { note } = payload;
+            state.favorites.selectedNote = note;
+        },
+        setSelectedTrashNote: (state, { payload }) => {
+            const { note } = payload;
+            state.trash.selectedNote = note;
+        },
+    },
     extraReducers: {
         [loadAllNotes.pending]: state => {
             onLoadNotesLoading(state.all);
@@ -78,6 +94,9 @@ function onLoadNotesSuccess(state, payload) {
     if(initialLoad) {
         state.notes = notes;
         state.loadedToIndex = 0;
+        if(notes.length > 0) {
+            state.selectedNote = {...notes[0]}
+        }
     } else {
         state.notes = [...state.notes, ...notes];
     }
@@ -90,6 +109,9 @@ function onLoadNotesError(state, payload) {
     state.error = error;
     state.loadedToIndex = state.loadedToIndex + pageSize;
     state.loading = false;
+    state.selectedNote = null;
 }
+
+export const { setSelectedNote, setSelectedFavoriteNote, setSelectedTrashNote } = notesSlice.actions;
 
 export default notesSlice.reducer;
