@@ -3,7 +3,8 @@ import {
     loadAllNotes,
     loadFavoriteNotes,
     loadTrashedNotes,
-    markNoteAsFavorite
+    markNoteAsFavorite,
+    markNoteAsTrashed
 } from "../thunks/notes";
 
 export const initialState = {
@@ -14,6 +15,7 @@ export const initialState = {
         loadedToIndex: 0,
         selectedNote: null,
         markingNoteAsFavorite: false,
+        markingNoteAsTrashed: false,
     },
     favorites: {
         notes: [],
@@ -91,20 +93,26 @@ const notesSlice = createSlice({
 
         [markNoteAsFavorite.fulfilled]: (state, { payload }) => {
             const { noteId } = payload;
-            state.all.notes = state.all.notes.map(note => {
-                if(note.id === noteId) {
-                    return {
-                        ...note,
-                        status: 'favorite'
-                    };
-                }
-                return note;
-            });
+            markNote(state.all, { noteId, status: 'favorite' });
             state.all.markingNoteAsFavorite = false;
         },
 
         [markNoteAsFavorite.rejected]: state => {
             state.all.markingNoteAsFavorite = false;
+        },
+
+        [markNoteAsTrashed.pending]: state => {
+            state.all.markingNoteAsTrashed = true;
+        },
+
+        [markNoteAsTrashed.fulfilled]: (state, { payload }) => {
+            const { noteId } = payload;
+            markNote(state.all, { noteId, status: 'trashed' });
+            state.all.markingNoteAsTrashed = true;
+        },
+
+        [markNoteAsTrashed.rejected]: state => {
+            state.all.markingNoteAsTrashed = true;
         }
     }
 });
@@ -134,6 +142,19 @@ function onLoadNotesError(state, payload) {
     state.loadedToIndex = state.loadedToIndex + pageSize;
     state.loading = false;
     state.selectedNote = null;
+}
+
+function markNote(state, payload) {
+    const { noteId, status } = payload;
+    state.notes = state.notes.map(note => {
+        if(note.id === noteId) {
+            return {
+                ...note,
+                status
+            };
+        }
+        return note;
+    });
 }
 
 export const { setSelectedNote, setSelectedFavoriteNote, setSelectedTrashNote } = notesSlice.actions;

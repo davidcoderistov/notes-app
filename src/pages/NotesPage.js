@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { markNoteAsFavorite } from "../thunks/notes";
+import { markNoteAsFavorite, markNoteAsTrashed } from "../thunks/notes";
 import { getSelectedNote } from "../selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { NotesView, NoteView } from "../components/notes";
@@ -18,7 +18,9 @@ function NotesPage() {
     };
 
     const onDeleteClick = () => {
-        console.log('NotesPage/onDeleteClick()');
+        if(selectedNote) {
+            dispatch(markNoteAsTrashed({ noteId: selectedNote.id }));
+        }
     };
 
     const onSyncClick = () => {

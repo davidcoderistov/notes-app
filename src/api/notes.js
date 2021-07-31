@@ -124,6 +124,13 @@ const notesAPI = {
             .update({
                 'status': 'favorite'
             });
+    },
+    markNoteAsTrashed(noteId) {
+        return notesCollection
+            .doc(noteId)
+            .update({
+                'status': 'trashed'
+            });
     }
 };
 
