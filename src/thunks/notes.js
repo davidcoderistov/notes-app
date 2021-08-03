@@ -148,6 +148,18 @@ const markFavoriteNoteAsFavorite = createAsyncThunk(
     }
 );
 
+const markTrashedNoteAsFavorite = createAsyncThunk(
+    'notes/markTrashedNoteAsFavorite',
+    async ({ noteId }, { rejectWithValue }) => {
+        try {
+            await notesAPI.markNoteAsFavorite(noteId);
+            return { noteId };
+        } catch(error) {
+            return rejectWithValue({ error: parseError(error) });
+        }
+    }
+);
+
 export {
     loadAllNotes,
     loadFavoriteNotes,
@@ -156,5 +168,6 @@ export {
     markNoteAsTrashed,
     markFavoriteNoteAsTrashed,
     markNoteAsPending,
-    markFavoriteNoteAsFavorite
+    markFavoriteNoteAsFavorite,
+    markTrashedNoteAsFavorite
 }

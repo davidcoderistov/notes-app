@@ -7,7 +7,8 @@ import {
     markNoteAsTrashed,
     markFavoriteNoteAsTrashed,
     markNoteAsPending,
-    markFavoriteNoteAsFavorite
+    markFavoriteNoteAsFavorite,
+    markTrashedNoteAsFavorite
 } from "../thunks/notes";
 
 export const initialState = {
@@ -39,6 +40,7 @@ export const initialState = {
         error: null,
         loadedToIndex: 0,
         selectedNote: null,
+        markingNoteAsFavorite: false,
     }
 };
 
@@ -177,6 +179,21 @@ const notesSlice = createSlice({
 
         [markFavoriteNoteAsFavorite.rejected]: state => {
             state.favorites.markingNoteAsFavorite = false;
+        },
+
+        [markTrashedNoteAsFavorite.pending]: state => {
+            state.trash.markingNoteAsFavorite = true;
+        },
+
+        [markTrashedNoteAsFavorite.fulfilled]: (state, { payload }) => {
+            const { noteId } = payload;
+            state.trash.totalCount = state.trash.totalCount - 1;
+            state.trash.notes = state.trash.notes.filter(note => note.id !== noteId);
+            state.trash.markingNoteAsFavorite = false;
+        },
+
+        [markTrashedNoteAsFavorite.rejected]: state => {
+            state.trash.markingNoteAsFavorite = false;
         },
     }
 });
