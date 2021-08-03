@@ -42,7 +42,7 @@ function Note({ index, style, payload }) {
         }
     };
 
-    const isLoading = !isItemLoaded(index);
+    const isLoading = !isItemLoaded(index, note);
 
     const isNoteSelected = !isLoading && note && selectedNote && selectedNote.id === note.id;
 
@@ -99,7 +99,7 @@ function NotesList({ loadNotes, notes, error, loading, loadedToIndex, notesCount
         }
     };
 
-    const isItemLoaded = index => index < loadedToIndex;
+    const isItemLoaded = (index, note) => note && index < loadedToIndex;
 
 
     return (
