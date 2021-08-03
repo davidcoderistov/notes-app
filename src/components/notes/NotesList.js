@@ -7,7 +7,8 @@ import {
     ListItemAvatar,
     ListItemSecondaryAction,
     Avatar,
-    CircularProgress
+    CircularProgress,
+    IconButton
 } from '@material-ui/core';
 import { makeStyles } from "@material-ui/core";
 import NotesIcon from '@material-ui/icons/Notes';
@@ -24,11 +25,17 @@ const useStyles = makeStyles(() => ({
 function Note({ index, style, payload }) {
     const classes = useStyles();
 
-    const { notes, isItemLoaded, onNoteClick } = payload;
+    const { notes, isItemLoaded, onNoteClick, onFavoriteActionClick } = payload;
     let note = notes[index];
 
     const handleOnNoteClick = () => {
         onNoteClick(note);
+    };
+
+    const handleOnFavoriteActionClick = () => {
+        if(onFavoriteActionClick) {
+            onFavoriteActionClick(note);
+        }
     };
 
     const isLoading = !isItemLoaded(index);
@@ -47,12 +54,23 @@ function Note({ index, style, payload }) {
                     />
                     { note.status === 'favorite' ? (
                         <ListItemSecondaryAction>
-                            <StarIcon color='primary'/>
+                            <IconButton onClick={handleOnFavoriteActionClick}>
+                                <StarIcon color='primary'/>
+                            </IconButton>
                         </ListItemSecondaryAction>
                     ) : null }
                     { note.status === 'trashed' ? (
                         <ListItemSecondaryAction>
-                            <DeleteIcon color='secondary'/>
+                            <IconButton>
+                                <DeleteIcon color='secondary'/>
+                            </IconButton>
+                        </ListItemSecondaryAction>
+                    ) : null }
+                    { note.status === 'pending' ? (
+                        <ListItemSecondaryAction>
+                            <IconButton onClick={handleOnFavoriteActionClick}>
+                                <StarIcon/>
+                            </IconButton>
                         </ListItemSecondaryAction>
                     ) : null }
                 </Fragment>
@@ -61,7 +79,7 @@ function Note({ index, style, payload }) {
     );
 }
 
-function NotesList({ loadNotes, notes, error, loading, loadedToIndex, notesCount, listKey, onNoteClick }) {
+function NotesList({ loadNotes, notes, error, loading, loadedToIndex, notesCount, listKey, onNoteClick, onFavoriteActionClick }) {
     // TODO: Display different views when there is an error or initial loading
     const loadMoreItems = (startIndex, stopIndex) => {
         if(startIndex > 0) {
@@ -88,7 +106,7 @@ function NotesList({ loadNotes, notes, error, loading, loadedToIndex, notesCount
                     ref={ref}
                     width={300}
                 >
-                    {args => Note({...args, payload: { notes, isItemLoaded, onNoteClick } })}
+                    {args => Note({...args, payload: { notes, isItemLoaded, onNoteClick, onFavoriteActionClick } })}
                 </List>
             )}
         </InfiniteLoader>

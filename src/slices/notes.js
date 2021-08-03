@@ -5,7 +5,8 @@ import {
     loadTrashedNotes,
     markNoteAsFavorite,
     markNoteAsTrashed,
-    markFavoriteNoteAsTrashed
+    markFavoriteNoteAsTrashed,
+    markNoteAsPending
 } from "../thunks/notes";
 
 export const initialState = {
@@ -26,6 +27,7 @@ export const initialState = {
         error: null,
         loadedToIndex: 0,
         selectedNote: null,
+        markingNoteAsPending: false,
         markingNoteAsTrashed: false,
     },
     trash: {
@@ -145,6 +147,20 @@ const notesSlice = createSlice({
 
         [markFavoriteNoteAsTrashed.rejected]: state => {
             state.favorites.markingNoteAsTrashed = false;
+        },
+
+        [markNoteAsPending.pending]: state => {
+            state.favorites.markingNoteAsPending = true;
+        },
+
+        [markNoteAsPending.fulfilled]: (state, { payload }) => {
+            const { noteId } = payload;
+            markNote(state.favorites, { noteId, status: 'pending' });
+            state.favorites.markingNoteAsPending = false;
+        },
+
+        [markNoteAsPending.rejected]: state => {
+            state.favorites.markingNoteAsPending = false;
         },
     }
 });

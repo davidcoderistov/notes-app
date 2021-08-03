@@ -124,4 +124,16 @@ const markFavoriteNoteAsTrashed = createAsyncThunk(
     }
 );
 
-export { loadAllNotes, loadFavoriteNotes, loadTrashedNotes, markNoteAsFavorite, markNoteAsTrashed, markFavoriteNoteAsTrashed }
+const markNoteAsPending = createAsyncThunk(
+    'notes/markNoteAsPending',
+    async ({ noteId }, { rejectWithValue }) => {
+        try {
+            await notesAPI.markNoteAsPending(noteId);
+            return { noteId };
+        } catch(error) {
+            return rejectWithValue({ error: parseError(error) });
+        }
+    }
+);
+
+export { loadAllNotes, loadFavoriteNotes, loadTrashedNotes, markNoteAsFavorite, markNoteAsTrashed, markFavoriteNoteAsTrashed, markNoteAsPending }

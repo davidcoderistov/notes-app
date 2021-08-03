@@ -131,6 +131,13 @@ const notesAPI = {
             .update({
                 'status': 'trashed'
             });
+    },
+    markNoteAsPending(noteId) {
+        return notesCollection
+            .doc(noteId)
+            .update({
+                'status': ''
+            });
     }
 };
 
