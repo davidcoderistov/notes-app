@@ -35,7 +35,7 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-function NotesView({status, onFavoriteActionClick}) {
+function NotesView({status, onFavoriteActionClick, selectedNote}) {
     const classes = useStyles();
 
     const [listKey, setListKey] = useState(1000);
@@ -132,6 +132,7 @@ function NotesView({status, onFavoriteActionClick}) {
                 notesCount={notesCount}
                 loadedToIndex={state.loadedToIndex}
                 onNoteClick={onNoteClick}
+                selectedNote={selectedNote}
                 onFavoriteActionClick={onFavoriteActionClick}
             />
         </div>

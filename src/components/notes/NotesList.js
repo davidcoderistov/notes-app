@@ -11,6 +11,7 @@ import {
     IconButton
 } from '@material-ui/core';
 import { makeStyles } from "@material-ui/core";
+import clsx from 'clsx';
 import NotesIcon from '@material-ui/icons/Notes';
 import StarIcon from '@material-ui/icons/Star';
 import DeleteIcon from '@material-ui/icons/HighlightOff';
@@ -18,6 +19,9 @@ import DeleteIcon from '@material-ui/icons/HighlightOff';
 const useStyles = makeStyles(() => ({
     noteContainer: {
         cursor: 'pointer'
+    },
+    noteBackground: {
+        backgroundColor: '#F0F0F0'
     }
 }));
 
@@ -25,7 +29,7 @@ const useStyles = makeStyles(() => ({
 function Note({ index, style, payload }) {
     const classes = useStyles();
 
-    const { notes, isItemLoaded, onNoteClick, onFavoriteActionClick } = payload;
+    const { notes, isItemLoaded, onNoteClick, onFavoriteActionClick, selectedNote } = payload;
     let note = notes[index];
 
     const handleOnNoteClick = () => {
@@ -39,8 +43,16 @@ function Note({ index, style, payload }) {
     };
 
     const isLoading = !isItemLoaded(index);
+
+    const isNoteSelected = !isLoading && note && selectedNote && selectedNote.id === note.id;
+
     return (
-        <ListItem style={style} key={index} className={classes.noteContainer} onClick={handleOnNoteClick}>
+        <ListItem
+            style={style}
+            key={index}
+            className={clsx(classes.noteContainer, isNoteSelected && classes.noteBackground )}
+            onClick={handleOnNoteClick}
+        >
             { isLoading ? <CircularProgress/> : (
                 <Fragment>
                     <ListItemAvatar>
@@ -79,7 +91,7 @@ function Note({ index, style, payload }) {
     );
 }
 
-function NotesList({ loadNotes, notes, error, loading, loadedToIndex, notesCount, listKey, onNoteClick, onFavoriteActionClick }) {
+function NotesList({ loadNotes, notes, error, loading, loadedToIndex, notesCount, listKey, onNoteClick, onFavoriteActionClick, selectedNote }) {
     // TODO: Display different views when there is an error or initial loading
     const loadMoreItems = (startIndex, stopIndex) => {
         if(startIndex > 0) {
@@ -106,7 +118,7 @@ function NotesList({ loadNotes, notes, error, loading, loadedToIndex, notesCount
                     ref={ref}
                     width={300}
                 >
-                    {args => Note({...args, payload: { notes, isItemLoaded, onNoteClick, onFavoriteActionClick } })}
+                    {args => Note({...args, payload: { notes, isItemLoaded, onNoteClick, onFavoriteActionClick, selectedNote } })}
                 </List>
             )}
         </InfiniteLoader>

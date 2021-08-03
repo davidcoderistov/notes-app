@@ -26,7 +26,10 @@ function TrashPage() {
 
     return (
         <Fragment>
-            <NotesView status='trashed'/>
+            <NotesView
+                status='trashed'
+                selectedNote={selectedNote}
+            />
             <NoteView
                 note={selectedNote}
                 onFavoriteClick={onFavoriteClick}

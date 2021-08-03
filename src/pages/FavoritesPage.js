@@ -34,7 +34,11 @@ function FavoritesPage() {
 
     return (
         <Fragment>
-            <NotesView status='favorite' onFavoriteActionClick={onFavoriteActionClick}/>
+            <NotesView
+                status='favorite'
+                selectedNote={selectedNote}
+                onFavoriteActionClick={onFavoriteActionClick}
+            />
             <NoteView
                 note={selectedNote}
                 onFavoriteClick={onFavoriteClick}

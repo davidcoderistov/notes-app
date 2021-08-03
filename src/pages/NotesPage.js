@@ -29,7 +29,10 @@ function NotesPage() {
 
     return (
         <Fragment>
-            <NotesView status='all'/>
+            <NotesView
+                status='all'
+                selectedNote={selectedNote}
+            />
             <NoteView
                 note={selectedNote}
                 onFavoriteClick={onFavoriteClick}
