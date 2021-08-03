@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { markFavoriteNoteAsTrashed, markNoteAsPending } from "../thunks/notes";
+import { markFavoriteNoteAsTrashed, markNoteAsPending, markFavoriteNoteAsFavorite } from "../thunks/notes";
 import { getSelectedFavoriteNote } from "../selectors";
 import { useSelector, useDispatch } from "react-redux";
 import { NotesView, NoteView } from "../components/notes";
@@ -27,7 +27,7 @@ function FavoritesPage() {
             if(note.status === 'favorite') {
                 dispatch(markNoteAsPending({ noteId: selectedNote.id }));
             } else if(note.status === 'pending') {
-
+                dispatch(markFavoriteNoteAsFavorite({ noteId: selectedNote.id }));
             }
         }
     };
