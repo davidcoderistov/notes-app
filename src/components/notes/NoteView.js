@@ -26,10 +26,8 @@ function NoteView(props) {
     const [content, handleOnContentChange] = useFormValue('');
 
     useEffect(() => {
-        if(note) {
-            handleOnTitleChange(note.title);
-            handleOnContentChange(note.content);
-        }
+        handleOnTitleChange(note ? note.title : '');
+        handleOnContentChange(note ? note.content : '');
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [note]);
 

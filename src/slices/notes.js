@@ -147,6 +147,11 @@ const notesSlice = createSlice({
             state.favorites.totalCount = state.favorites.totalCount - 1;
             state.favorites.notes = state.favorites.notes.filter(note => note.id !== noteId);
             state.favorites.markingNoteAsTrashed = false;
+            if(state.favorites.notes.length > 0) {
+                state.favorites.selectedNote = {...state.favorites.notes[0]};
+            } else {
+                state.favorites.selectedNote = null;
+            }
         },
 
         [markFavoriteNoteAsTrashed.rejected]: state => {
@@ -190,6 +195,11 @@ const notesSlice = createSlice({
             state.trash.totalCount = state.trash.totalCount - 1;
             state.trash.notes = state.trash.notes.filter(note => note.id !== noteId);
             state.trash.markingNoteAsFavorite = false;
+            if(state.trash.notes.length > 0) {
+                state.trash.selectedNote = {...state.trash.notes[0]};
+            } else {
+                state.trash.selectedNote = null;
+            }
         },
 
         [markTrashedNoteAsFavorite.rejected]: state => {
