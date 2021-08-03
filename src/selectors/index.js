@@ -18,3 +18,7 @@ export const getAllNotesCount = state => state.notes.all.totalCount;
 export const getFavoriteNotesCount = state => state.notes.favorites.totalCount;
 
 export const getTrashedNotesCount = state => state.notes.trash.totalCount;
+
+export const getDeleteDialogValue = state => state.notes.trash.isDeleteDialogOpen;
+
+export const getIsDeletingNote = state => state.notes.trash.deletingNote;

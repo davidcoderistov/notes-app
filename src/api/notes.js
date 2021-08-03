@@ -138,6 +138,11 @@ const notesAPI = {
             .update({
                 'status': ''
             });
+    },
+    deleteNote(noteId) {
+        return notesCollection
+            .doc(noteId)
+            .delete();
     }
 };
 

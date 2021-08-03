@@ -160,6 +160,18 @@ const markTrashedNoteAsFavorite = createAsyncThunk(
     }
 );
 
+const deleteNote = createAsyncThunk(
+    'notes/deleteNote',
+    async ({ noteId }, { rejectWithValue }) => {
+        try {
+            await notesAPI.deleteNote(noteId);
+            return { noteId };
+        } catch(error) {
+            return rejectWithValue({ error: parseError(error) });
+        }
+    }
+);
+
 export {
     loadAllNotes,
     loadFavoriteNotes,
@@ -169,5 +181,6 @@ export {
     markFavoriteNoteAsTrashed,
     markNoteAsPending,
     markFavoriteNoteAsFavorite,
-    markTrashedNoteAsFavorite
+    markTrashedNoteAsFavorite,
+    deleteNote
 }

@@ -1,14 +1,29 @@
 import React, { Fragment } from "react";
-import { markTrashedNoteAsFavorite } from "../thunks/notes";
-import { getSelectedTrashNote } from "../selectors";
+import { markTrashedNoteAsFavorite, deleteNote } from "../thunks/notes";
+import { setDeleteDialog } from "../slices/notes";
+import { getSelectedTrashNote, getDeleteDialogValue, getIsDeletingNote } from "../selectors";
 import { useSelector, useDispatch } from "react-redux";
-import { NotesView, NoteView } from "../components/notes";
+import { NotesView, NoteView, DeleteNoteModal } from "../components/notes";
 
 
 function TrashPage() {
     const selectedNote = useSelector(getSelectedTrashNote);
 
+    const open = useSelector(getDeleteDialogValue);
+
+    const isDeletingNote = useSelector(getIsDeletingNote);
+
     const dispatch = useDispatch();
+
+    const handleModalClose = () => {
+        dispatch(setDeleteDialog({ isOpen: false }));
+    };
+
+    const handleDeleteNote = () => {
+        if(selectedNote) {
+            dispatch(deleteNote({ noteId: selectedNote.id }));
+        }
+    };
 
     const onFavoriteClick = () => {
         if(selectedNote) {
@@ -17,7 +32,7 @@ function TrashPage() {
     };
 
     const onDeleteClick = () => {
-        console.log('TrashPage/onDeleteClick()');
+        dispatch(setDeleteDialog({ isOpen: true }));
     };
 
     const onSyncClick = () => {
@@ -35,6 +50,13 @@ function TrashPage() {
                 onFavoriteClick={onFavoriteClick}
                 onDeleteClick={onDeleteClick}
                 onSyncClick={onSyncClick}
+            />
+            <DeleteNoteModal
+                open={open}
+                note={selectedNote}
+                isDeletingNote={isDeletingNote}
+                handleClose={handleModalClose}
+                handleDelete={handleDeleteNote}
             />
         </Fragment>
     );

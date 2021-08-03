@@ -8,7 +8,8 @@ import {
     markFavoriteNoteAsTrashed,
     markNoteAsPending,
     markFavoriteNoteAsFavorite,
-    markTrashedNoteAsFavorite
+    markTrashedNoteAsFavorite,
+    deleteNote
 } from "../thunks/notes";
 
 export const initialState = {
@@ -41,6 +42,8 @@ export const initialState = {
         loadedToIndex: 0,
         selectedNote: null,
         markingNoteAsFavorite: false,
+        isDeleteDialogOpen: false,
+        deletingNote: false,
     }
 };
 
@@ -71,6 +74,10 @@ const notesSlice = createSlice({
         setTrashedNotesTotalCount: (state, { payload }) => {
             const { count } = payload;
             state.trash.totalCount = count;
+        },
+        setDeleteDialog: (state, { payload }) => {
+            const { isOpen } = payload;
+            state.trash.isDeleteDialogOpen = isOpen;
         }
     },
     extraReducers: {
@@ -191,6 +198,21 @@ const notesSlice = createSlice({
         [markTrashedNoteAsFavorite.rejected]: state => {
             state.trash.markingNoteAsFavorite = false;
         },
+
+        [deleteNote.pending]: state => {
+            state.trash.deletingNote = true;
+        },
+
+        [deleteNote.fulfilled]: (state, { payload }) => {
+            removeNote(state.trash, payload);
+            state.trash.deletingNote = false;
+            state.trash.isDeleteDialogOpen = false;
+        },
+
+        [deleteNote.rejected]: state => {
+            state.trash.deletingNote = false;
+            state.trash.isDeleteDialogOpen = false;
+        },
     }
 });
 
@@ -251,7 +273,8 @@ export const {
     setSelectedTrashNote,
     setAllNotesTotalCount,
     setFavoriteNotesTotalCount,
-    setTrashedNotesTotalCount
+    setTrashedNotesTotalCount,
+    setDeleteDialog
 } = notesSlice.actions;
 
 export default notesSlice.reducer;
