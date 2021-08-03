@@ -143,15 +143,8 @@ const notesSlice = createSlice({
         },
 
         [markFavoriteNoteAsTrashed.fulfilled]: (state, { payload }) => {
-            const { noteId } = payload;
-            state.favorites.totalCount = state.favorites.totalCount - 1;
-            state.favorites.notes = state.favorites.notes.filter(note => note.id !== noteId);
+            removeNote(state.favorites, payload);
             state.favorites.markingNoteAsTrashed = false;
-            if(state.favorites.notes.length > 0) {
-                state.favorites.selectedNote = {...state.favorites.notes[0]};
-            } else {
-                state.favorites.selectedNote = null;
-            }
         },
 
         [markFavoriteNoteAsTrashed.rejected]: state => {
@@ -191,15 +184,8 @@ const notesSlice = createSlice({
         },
 
         [markTrashedNoteAsFavorite.fulfilled]: (state, { payload }) => {
-            const { noteId } = payload;
-            state.trash.totalCount = state.trash.totalCount - 1;
-            state.trash.notes = state.trash.notes.filter(note => note.id !== noteId);
+            removeNote(state.trash, payload);
             state.trash.markingNoteAsFavorite = false;
-            if(state.trash.notes.length > 0) {
-                state.trash.selectedNote = {...state.trash.notes[0]};
-            } else {
-                state.trash.selectedNote = null;
-            }
         },
 
         [markTrashedNoteAsFavorite.rejected]: state => {
@@ -246,6 +232,17 @@ function markNote(state, payload) {
         }
         return note;
     });
+}
+
+function removeNote(state, payload) {
+    const { noteId } = payload;
+    state.totalCount = state.totalCount - 1;
+    state.notes = state.notes.filter(note => note.id !== noteId);
+    if(state.notes.length > 0) {
+        state.selectedNote = {...state.notes[0]};
+    } else {
+        state.selectedNote = null;
+    }
 }
 
 export const {
