@@ -143,6 +143,14 @@ const notesAPI = {
         return notesCollection
             .doc(noteId)
             .delete();
+    },
+    syncNote(noteId, title, content) {
+        return notesCollection
+            .doc(noteId)
+            .update({
+                title,
+                content
+            })
     }
 };
 

@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { markTrashedNoteAsFavorite, deleteNote } from "../thunks/notes";
+import {markTrashedNoteAsFavorite, deleteNote, syncNote} from "../thunks/notes";
 import { setDeleteDialog } from "../slices/notes";
 import { getSelectedTrashNote, getDeleteDialogValue, getIsDeletingNote } from "../selectors";
 import { useSelector, useDispatch } from "react-redux";
@@ -35,8 +35,15 @@ function TrashPage() {
         dispatch(setDeleteDialog({ isOpen: true }));
     };
 
-    const onSyncClick = () => {
-        console.log('TrashPage/onSyncClick()');
+    const onSyncClick = (noteId, title, content) => {
+        if(noteId) {
+            dispatch(syncNote({
+                noteId,
+                title,
+                content,
+                status: 'trashed'
+            }));
+        }
     };
 
     return (

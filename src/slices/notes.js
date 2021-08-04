@@ -9,8 +9,10 @@ import {
     markNoteAsPending,
     markFavoriteNoteAsFavorite,
     markTrashedNoteAsFavorite,
-    deleteNote
+    deleteNote,
+    syncNote
 } from "../thunks/notes";
+import moment from "moment";
 
 export const initialState = {
     all: {
@@ -22,6 +24,7 @@ export const initialState = {
         selectedNote: null,
         markingNoteAsFavorite: false,
         markingNoteAsTrashed: false,
+        syncingNote: false,
     },
     favorites: {
         notes: [],
@@ -33,6 +36,7 @@ export const initialState = {
         markingNoteAsFavorite: false,
         markingNoteAsPending: false,
         markingNoteAsTrashed: false,
+        syncingNote: false,
     },
     trash: {
         notes: [],
@@ -44,6 +48,7 @@ export const initialState = {
         markingNoteAsFavorite: false,
         isDeleteDialogOpen: false,
         deletingNote: false,
+        syncingNote: false,
     }
 };
 
@@ -212,6 +217,43 @@ const notesSlice = createSlice({
         [deleteNote.rejected]: state => {
             state.trash.deletingNote = false;
             state.trash.isDeleteDialogOpen = false;
+        },
+
+        [syncNote.pending]: (state, { meta }) => {
+            const { status } = meta.arg;
+            const stateSlice = status === 'all' ? state.all :
+                status === 'favorites' ? state.favorites :
+                    state.trash;
+            stateSlice.syncingNote = true;
+        },
+
+        [syncNote.fulfilled]: (state, { payload }) => {
+            const { noteId, title, content, status } = payload;
+            const stateSlice = status === 'all' ? state.all :
+                status === 'favorites' ? state.favorites :
+                    state.trash;
+            stateSlice.notes = stateSlice.notes.map(note => {
+                if(note.id === noteId) {
+                    const updatedNote = {
+                        ...note,
+                        title,
+                        content,
+                        syncedAt: moment().format('LT on L')
+                    };
+                    stateSlice.selectedNote = {...updatedNote};
+                    return {...updatedNote};
+                }
+                return note
+            });
+            stateSlice.syncingNote = false;
+        },
+
+        [syncNote.rejected]: (state, { payload }) => {
+            const { status } = payload;
+            const stateSlice = status === 'all' ? state.all :
+                status === 'favorites' ? state.favorites :
+                    state.trash;
+            stateSlice.syncingNote = false;
         },
     }
 });

@@ -25,6 +25,10 @@ function NoteView(props) {
 
     const [content, handleOnContentChange] = useFormValue('');
 
+    const handleOnSyncClick = () => {
+        onSyncClick(note ? note.id : null, title, content);
+    };
+
     useEffect(() => {
         handleOnTitleChange(note ? note.title : '');
         handleOnContentChange(note ? note.content : '');
@@ -42,7 +46,8 @@ function NoteView(props) {
             <NotesActionBar
                 onFavoriteClick={onFavoriteClick}
                 onDeleteClick={onDeleteClick}
-                onSyncClick={onSyncClick}
+                onSyncClick={handleOnSyncClick}
+                syncedAt={note ? note.syncedAt : null}
             />
         </Box>
     );

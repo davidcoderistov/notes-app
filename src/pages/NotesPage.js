@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { markNoteAsFavorite, markNoteAsTrashed } from "../thunks/notes";
+import { markNoteAsFavorite, markNoteAsTrashed, syncNote } from "../thunks/notes";
 import { getSelectedNote } from "../selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { NotesView, NoteView } from "../components/notes";
@@ -23,8 +23,15 @@ function NotesPage() {
         }
     };
 
-    const onSyncClick = () => {
-        console.log('NotesPage/onSyncClick()');
+    const onSyncClick = (noteId, title, content) => {
+        if(noteId) {
+            dispatch(syncNote({
+                noteId,
+                title,
+                content,
+                status: 'all'
+            }));
+        }
     };
 
     return (

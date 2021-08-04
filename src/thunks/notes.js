@@ -11,7 +11,8 @@ function parseNote(note) {
         createdAt: {
             seconds: note.createdAt.seconds,
             nanoseconds: note.createdAt.nanoseconds
-        }
+        },
+        syncedAt: null,
     }
 }
 
@@ -172,6 +173,18 @@ const deleteNote = createAsyncThunk(
     }
 );
 
+const syncNote = createAsyncThunk(
+    'notes/syncNote',
+    async ({ noteId, title, content, status }, { rejectWithValue }) => {
+        try {
+            await notesAPI.syncNote(noteId, title, content);
+            return { noteId, title, content, status };
+        } catch(error) {
+            return rejectWithValue({ error: parseError(error), status });
+        }
+    }
+);
+
 export {
     loadAllNotes,
     loadFavoriteNotes,
@@ -182,5 +195,6 @@ export {
     markNoteAsPending,
     markFavoriteNoteAsFavorite,
     markTrashedNoteAsFavorite,
-    deleteNote
+    deleteNote,
+    syncNote
 }

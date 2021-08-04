@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { markFavoriteNoteAsTrashed, markNoteAsPending, markFavoriteNoteAsFavorite } from "../thunks/notes";
+import {markFavoriteNoteAsTrashed, markNoteAsPending, markFavoriteNoteAsFavorite, syncNote} from "../thunks/notes";
 import { getSelectedFavoriteNote } from "../selectors";
 import { useSelector, useDispatch } from "react-redux";
 import { NotesView, NoteView } from "../components/notes";
@@ -18,8 +18,15 @@ function FavoritesPage() {
         }
     };
 
-    const onSyncClick = () => {
-        console.log('FavoritesPage/onSyncClick()');
+    const onSyncClick = (noteId, title, content) => {
+        if(noteId) {
+            dispatch(syncNote({
+                noteId,
+                title,
+                content,
+                status: 'favorites'
+            }));
+        }
     };
 
     const onFavoriteActionClick = note => {

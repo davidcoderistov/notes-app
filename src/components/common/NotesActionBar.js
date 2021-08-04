@@ -8,7 +8,8 @@ function NotesActionBar(props) {
     const {
         onFavoriteClick,
         onDeleteClick,
-        onSyncClick
+        onSyncClick,
+        syncedAt
     } = props;
 
     return (
@@ -27,6 +28,9 @@ function NotesActionBar(props) {
                 </IconButton>
             </div>
             <div>
+                {syncedAt ? (
+                    <span>{ syncedAt }</span>
+                ) : null}
                 <IconButton onClick={onSyncClick}>
                     <SyncIcon/>
                 </IconButton>
