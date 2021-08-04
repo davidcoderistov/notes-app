@@ -269,9 +269,14 @@ function onLoadNotesSuccess(state, payload) {
         state.loadedToIndex = 0;
         if(notes.length > 0) {
             state.selectedNote = {...notes[0]}
+        } else {
+            state.selectedNote = null;
         }
     } else {
         state.notes = [...state.notes, ...notes];
+        if(notes.length === 0) {
+            state.selectedNote = null;
+        }
     }
     state.loadedToIndex = state.loadedToIndex + notes.length;
     state.loading = false;
