@@ -16,7 +16,9 @@ function NoteView(props) {
         note,
         onFavoriteClick,
         onDeleteClick,
-        onSyncClick
+        onSyncClick,
+        onCreateClick,
+        shouldShowAddNewNote
     } = props;
 
     const classes = useStyles();
@@ -42,12 +44,15 @@ function NoteView(props) {
                 onTitleChange={handleOnTitleChange}
                 content={content}
                 onContentChange={handleOnContentChange}
+                rows={24}
             />
             <NotesActionBar
                 onFavoriteClick={onFavoriteClick}
                 onDeleteClick={onDeleteClick}
                 onSyncClick={handleOnSyncClick}
+                onCreateClick={onCreateClick}
                 syncedAt={note ? note.syncedAt : null}
+                shouldShowAddNewNote={shouldShowAddNewNote}
             />
         </Box>
     );

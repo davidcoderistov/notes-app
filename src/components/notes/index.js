@@ -3,3 +3,4 @@ export * from './NotesView';
 export * from './Note';
 export * from './NoteView';
 export * from './DeleteNoteModal';
+export * from './CreateNoteModal';

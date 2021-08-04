@@ -22,3 +22,7 @@ export const getTrashedNotesCount = state => state.notes.trash.totalCount;
 export const getDeleteDialogValue = state => state.notes.trash.isDeleteDialogOpen;
 
 export const getIsDeletingNote = state => state.notes.trash.deletingNote;
+
+export const getCreateDialogValue = state => state.notes.all.isCreateDialogOpen;
+
+export const getIsCreatingNote = state => state.notes.all.creatingNote;

@@ -9,7 +9,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 
-function Note({title, onTitleChange, content, onContentChange}) {
+function Note({title, onTitleChange, content, onContentChange, rows}) {
     const classes = useStyles();
 
     return (
@@ -25,8 +25,8 @@ function Note({title, onTitleChange, content, onContentChange}) {
                 variant="outlined"
                 fullWidth
                 multiline
-                rows="24"
-                maxrows="24"
+                rows={rows}
+                maxrows={rows}
                 value={content}
                 onChange={onContentChange}/>
         </Fragment>

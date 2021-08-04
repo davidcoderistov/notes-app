@@ -1,13 +1,15 @@
 import React, { Fragment } from "react";
-import { markNoteAsFavorite, markNoteAsTrashed, syncNote } from "../thunks/notes";
-import { getSelectedNote } from "../selectors";
+import { markNoteAsFavorite, markNoteAsTrashed, syncNote, addNote } from "../thunks/notes";
+import { setCreateDialog } from "../slices/notes";
+import { getSelectedNote, getCreateDialogValue, getIsCreatingNote } from "../selectors";
 import { useDispatch, useSelector } from "react-redux";
-import { NotesView, NoteView } from "../components/notes";
-
+import { NotesView, NoteView, CreateNoteModal } from "../components/notes";
 
 
 function NotesPage() {
     const selectedNote = useSelector(getSelectedNote);
+    const open = useSelector(getCreateDialogValue);
+    const isCreatingNote = useSelector(getIsCreatingNote);
 
     const dispatch = useDispatch();
 
@@ -34,6 +36,18 @@ function NotesPage() {
         }
     };
 
+    const onCreateClick = () => {
+        dispatch(setCreateDialog({ isOpen: true }));
+    };
+
+    const handleCreateNote = (title, content) => {
+        dispatch(addNote({ title, content }));
+    };
+
+    const handleCloseModal = () => {
+        dispatch(setCreateDialog({ isOpen: false }));
+    };
+
     return (
         <Fragment>
             <NotesView
@@ -45,6 +59,14 @@ function NotesPage() {
                 onFavoriteClick={onFavoriteClick}
                 onDeleteClick={onDeleteClick}
                 onSyncClick={onSyncClick}
+                onCreateClick={onCreateClick}
+                shouldShowAddNewNote
+            />
+            <CreateNoteModal
+                open={open}
+                handleClose={handleCloseModal}
+                handleCreate={handleCreateNote}
+                isCreatingNote={isCreatingNote}
             />
         </Fragment>
     );

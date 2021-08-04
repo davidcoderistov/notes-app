@@ -150,7 +150,23 @@ const notesAPI = {
             .update({
                 title,
                 content
-            })
+            });
+    },
+    addNote(title, content) {
+        return notesCollection.add({
+            title,
+            content,
+            createdAt: new firebase.firestore.Timestamp.fromDate(new Date())
+        }).then(note => {
+            return notesCollection
+                .doc(note.id)
+                .update({
+                    id: note.id
+                }).then(() => note.id).catch(error => error);
+        }).catch(error => error);
+    },
+    getNote(noteId) {
+        return notesCollection.doc(noteId).get();
     }
 };
 

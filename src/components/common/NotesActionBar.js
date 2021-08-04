@@ -3,13 +3,16 @@ import { Box, IconButton } from "@material-ui/core";
 import StarIcon from '@material-ui/icons/Star';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SyncIcon from '@material-ui/icons/Sync';
+import AddIcon from '@material-ui/icons/Add';
 
 function NotesActionBar(props) {
     const {
         onFavoriteClick,
         onDeleteClick,
         onSyncClick,
-        syncedAt
+        onCreateClick,
+        syncedAt,
+        shouldShowAddNewNote
     } = props;
 
     return (
@@ -34,6 +37,11 @@ function NotesActionBar(props) {
                 <IconButton onClick={onSyncClick}>
                     <SyncIcon/>
                 </IconButton>
+                {shouldShowAddNewNote ? (
+                    <IconButton onClick={onCreateClick}>
+                        <AddIcon/>
+                    </IconButton>
+                ) : null}
             </div>
         </Box>
     )

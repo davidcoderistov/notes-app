@@ -185,6 +185,19 @@ const syncNote = createAsyncThunk(
     }
 );
 
+const addNote = createAsyncThunk(
+    'notes/addNote',
+    async ({ title, content }, { rejectWithValue }) => {
+        try {
+            const noteId = await notesAPI.addNote(title, content);
+            const noteDoc = await notesAPI.getNote(noteId);
+            return { note: parseNote(noteDoc.data()) };
+        } catch(error) {
+            return rejectWithValue({ error: parseError(error) });
+        }
+    }
+);
+
 export {
     loadAllNotes,
     loadFavoriteNotes,
@@ -196,5 +209,6 @@ export {
     markFavoriteNoteAsFavorite,
     markTrashedNoteAsFavorite,
     deleteNote,
-    syncNote
+    syncNote,
+    addNote
 }
