@@ -10,7 +10,11 @@ function FavoritesPage() {
 
     const dispatch = useDispatch();
 
-    const onFavoriteClick = () => {};
+    const onFavoriteClick = () => {
+        if(selectedNote) {
+            handleOnFavoriteActionClick(selectedNote);
+        }
+    };
 
     const onDeleteClick = () => {
         if(selectedNote) {
@@ -31,11 +35,15 @@ function FavoritesPage() {
 
     const onFavoriteActionClick = note => {
         if(note) {
-            if(note.status === 'favorite') {
-                dispatch(markNoteAsPending({ noteId: selectedNote.id }));
-            } else if(note.status === 'pending') {
-                dispatch(markFavoriteNoteAsFavorite({ noteId: selectedNote.id }));
-            }
+            handleOnFavoriteActionClick(note);
+        }
+    };
+
+    const handleOnFavoriteActionClick = note => {
+        if(note.status === 'favorite') {
+            dispatch(markNoteAsPending({ noteId: selectedNote.id }));
+        } else if(note.status === 'pending') {
+            dispatch(markFavoriteNoteAsFavorite({ noteId: selectedNote.id }));
         }
     };
 
