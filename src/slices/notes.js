@@ -148,8 +148,7 @@ const notesSlice = createSlice({
         },
 
         [markNoteAsTrashed.fulfilled]: (state, { payload }) => {
-            const { noteId } = payload;
-            markNote(state.all, { noteId, status: 'trashed' });
+            removeNote(state.all, payload);
             state.all.markingNoteAsTrashed = false;
         },
 
