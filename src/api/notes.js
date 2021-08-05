@@ -17,6 +17,7 @@ function getTimestamp(date) {
 const notesAPI = {
     loadAllNotes(startAt, pageSize) {
         let query = notesCollection
+            .where('status', '==', 'intact')
             .orderBy('createdAt', 'desc');
 
         if(startAt) {
@@ -58,6 +59,7 @@ const notesAPI = {
     },
     searchAllNotesByTitle(title, startAt, pageSize) {
         return notesCollection
+            .where('status', '==', 'intact')
             .where('title', '>=', title)
             .where('title', '<=', `${title}\uf8ff`)
             .orderBy('title')
@@ -86,7 +88,9 @@ const notesAPI = {
             .get();
     },
     getAllNotes() {
-        return notesCollection.get();
+        return notesCollection
+            .where('status', '==', 'intact')
+            .get();
     },
     getFavoriteNotes() {
         return notesCollection
@@ -100,6 +104,7 @@ const notesAPI = {
     },
     getAllNotesByTitle(title) {
         return notesCollection
+            .where('status', '==', 'intact')
             .where('title', '>=', title)
             .where('title', '<=', `${title}\uf8ff`)
             .get();
