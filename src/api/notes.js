@@ -141,7 +141,7 @@ const notesAPI = {
         return notesCollection
             .doc(noteId)
             .update({
-                'status': ''
+                'status': 'intact'
             });
     },
     deleteNote(noteId) {
