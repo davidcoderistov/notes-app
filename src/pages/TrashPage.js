@@ -51,6 +51,7 @@ function TrashPage() {
             <NotesView
                 status='trashed'
                 selectedNote={selectedNote}
+                onDeleteActionClick={onDeleteClick}
             />
             <NoteView
                 note={selectedNote}

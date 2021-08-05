@@ -14,7 +14,7 @@ import { makeStyles } from "@material-ui/core";
 import clsx from 'clsx';
 import NotesIcon from '@material-ui/icons/Notes';
 import StarIcon from '@material-ui/icons/Star';
-import DeleteIcon from '@material-ui/icons/HighlightOff';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles(() => ({
     noteContainer: {
@@ -29,7 +29,7 @@ const useStyles = makeStyles(() => ({
 function Note({ index, style, payload }) {
     const classes = useStyles();
 
-    const { notes, isItemLoaded, onNoteClick, onFavoriteActionClick, selectedNote } = payload;
+    const { notes, isItemLoaded, onNoteClick, onFavoriteActionClick, onDeleteActionClick, selectedNote } = payload;
     let note = notes[index];
 
     const handleOnNoteClick = () => {
@@ -39,6 +39,12 @@ function Note({ index, style, payload }) {
     const handleOnFavoriteActionClick = () => {
         if(onFavoriteActionClick) {
             onFavoriteActionClick(note);
+        }
+    };
+
+    const handleOnDeleteActionClick = () => {
+        if(onDeleteActionClick) {
+            onDeleteActionClick(note);
         }
     };
 
@@ -73,7 +79,7 @@ function Note({ index, style, payload }) {
                     ) : null }
                     { note.status === 'trashed' ? (
                         <ListItemSecondaryAction>
-                            <IconButton>
+                            <IconButton onClick={handleOnDeleteActionClick}>
                                 <DeleteIcon color='secondary'/>
                             </IconButton>
                         </ListItemSecondaryAction>
@@ -91,7 +97,7 @@ function Note({ index, style, payload }) {
     );
 }
 
-function NotesList({ loadNotes, notes, error, loading, loadedToIndex, notesCount, listKey, onNoteClick, onFavoriteActionClick, selectedNote }) {
+function NotesList({ loadNotes, notes, error, loading, loadedToIndex, notesCount, listKey, onNoteClick, onFavoriteActionClick, onDeleteActionClick, selectedNote }) {
     // TODO: Display different views when there is an error or initial loading
     const loadMoreItems = (startIndex, stopIndex) => {
         if(startIndex > 0) {
@@ -118,7 +124,7 @@ function NotesList({ loadNotes, notes, error, loading, loadedToIndex, notesCount
                     ref={ref}
                     width={300}
                 >
-                    {args => Note({...args, payload: { notes, isItemLoaded, onNoteClick, onFavoriteActionClick, selectedNote } })}
+                    {args => Note({...args, payload: { notes, isItemLoaded, onNoteClick, onFavoriteActionClick, onDeleteActionClick, selectedNote } })}
                 </List>
             )}
         </InfiniteLoader>
