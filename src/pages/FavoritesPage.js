@@ -41,9 +41,9 @@ function FavoritesPage() {
 
     const handleOnFavoriteActionClick = note => {
         if(note.status === 'favorite') {
-            dispatch(markNoteAsPending({ noteId: selectedNote.id }));
+            dispatch(markNoteAsPending({ noteId: note.id }));
         } else if(note.status === 'pending') {
-            dispatch(markFavoriteNoteAsFavorite({ noteId: selectedNote.id }));
+            dispatch(markFavoriteNoteAsFavorite({ noteId: note.id }));
         }
     };
 

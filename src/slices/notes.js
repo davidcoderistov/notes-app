@@ -318,6 +318,10 @@ function markNote(state, payload) {
     const { noteId, status } = payload;
     state.notes = state.notes.map(note => {
         if(note.id === noteId) {
+            state.selectedNote = {
+                ...note,
+                status
+            };
             return {
                 ...note,
                 status
