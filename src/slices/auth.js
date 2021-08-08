@@ -6,11 +6,13 @@ export const initialState = {
     isAuthenticated: false,
     signInError: {
         email: {},
-        password: {}
+        password: {},
+        general: {}
     },
     signUpError: {
         email: {},
         password: {},
+        general: {}
     },
     loading: false,
 };
@@ -19,18 +21,20 @@ const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        resetSignInEmailError: state => {
-            state.signInError.email = {};
+        resetSignInErrors: state => {
+            state.signInError = {
+                email: {},
+                password: {},
+                general: {}
+            };
         },
-        resetSignInPasswordError: state => {
-            state.signInError.password = {};
+        resetSignUpErrors: state => {
+            state.signUpError = {
+                email: {},
+                password: {},
+                general: {}
+            };
         },
-        resetSignUpEmailError: state => {
-            state.signUpError.email = {};
-        },
-        resetSignUpPasswordError: state => {
-            state.signUpError.password = {};
-        }
     },
     extraReducers: {
         [login.pending]: state => {
@@ -38,6 +42,7 @@ const authSlice = createSlice({
             state.signInError = {
                 email: {},
                 password: {},
+                general: {}
             };
         },
 
@@ -48,18 +53,22 @@ const authSlice = createSlice({
             state.signInError = {
                 email: {},
                 password: {},
+                general: {}
             };
         },
 
         [login.rejected]: (state, { payload }) => {
             const { error } = payload;
             if(error.code) {
-                if(error.code === 'auth/invalid-email' || error.code === 'auth/user-disabled' || error.code === 'auth/user-not-found') {
+                if(error.code === 'auth/invalid-email') {
                     state.signInError.email.isError = true;
                     state.signInError.email.message = error.message;
                 } else if(error.code === 'auth/wrong-password') {
                     state.signInError.password.isError = true;
                     state.signInError.password.message = error.message;
+                } else {
+                    state.signInError.general.isError = true;
+                    state.signInError.general.message = error.message;
                 }
             }
             state.isAuthenticated = false;
@@ -71,6 +80,7 @@ const authSlice = createSlice({
             state.signUpError = {
                 email: {},
                 password: {},
+                general: {}
             };
         },
 
@@ -79,18 +89,22 @@ const authSlice = createSlice({
             state.signUpError = {
                 email: {},
                 password: {},
+                general: {}
             };
         },
 
         [signup.rejected]: (state, { payload }) => {
             const { error } = payload;
             if(error.code) {
-                if(error.code === 'auth/email-already-in-use' || error.code === 'auth/invalid-email' || error.code === 'auth/operation-not-allowed') {
+                if(error.code === 'auth/email-already-in-use' || error.code === 'auth/invalid-email') {
                     state.signUpError.email.isError = true;
                     state.signUpError.email.message = error.message;
                 } else if(error.code === 'auth/weak-password') {
                     state.signUpError.password.isError = true;
                     state.signUpError.password.message = error.message;
+                } else {
+                    state.signUpError.general.isError = true;
+                    state.signUpError.general.message = error.message;
                 }
             }
             state.loading = false;
@@ -99,10 +113,8 @@ const authSlice = createSlice({
 });
 
 export const {
-    resetSignInEmailError,
-    resetSignInPasswordError,
-    resetSignUpEmailError,
-    resetSignUpPasswordError
+    resetSignInErrors,
+    resetSignUpErrors
 } = authSlice.actions;
 
 export default authSlice.reducer;

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useFormValue } from "../../hooks";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
-import { resetSignInEmailError, resetSignInPasswordError } from "../../slices/auth";
+import { resetSignInErrors } from "../../slices/auth";
 import { login } from "../../thunks/auth";
 import { getAuth } from "../../selectors";
 import {
@@ -19,6 +19,7 @@ import {
     Typography,
     CssBaseline
 } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -40,6 +41,10 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    generalError: {
+        marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(1)
+    }
 }));
 
 function Login() {
@@ -62,12 +67,7 @@ function Login() {
     }
 
     useEffect(() => {
-        if(auth.signInError.email.isError) {
-            dispatch(resetSignInEmailError());
-        } else if(auth.signInError.password.isError) {
-            dispatch(resetSignInPasswordError());
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        dispatch(resetSignInErrors());
     }, [dispatch]);
 
     useEffect(() => {
@@ -86,6 +86,9 @@ function Login() {
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
+                { auth.signInError.general.isError ? (
+                    <Alert severity="error" className={classes.generalError}>{ auth.signInError.general.message }</Alert>
+                ) : null}
                 <form className={classes.form} noValidate>
                     <NotesTextField
                         value={email}

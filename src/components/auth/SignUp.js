@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useFormValue } from "../../hooks";
 import { signup } from "../../thunks/auth";
-import { resetSignUpEmailError, resetSignUpPasswordError } from "../../slices/auth";
+import { resetSignUpErrors } from "../../slices/auth";
 import {
     NotesTextField,
     NotesButton,
@@ -19,6 +19,7 @@ import {
     Typography,
     CssBaseline
 } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -41,6 +42,10 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    generalError: {
+        marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(1)
+    }
 }));
 
 function SignUp() {
@@ -55,12 +60,7 @@ function SignUp() {
     const history = useHistory();
 
     useEffect(() => {
-        if(auth.signUpError.email.isError) {
-            dispatch(resetSignUpEmailError());
-        } else if(auth.signUpError.password.isError) {
-            dispatch(resetSignUpPasswordError());
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        dispatch(resetSignUpErrors());
     }, [dispatch]);
 
     const clearState = () => {
@@ -93,6 +93,9 @@ function SignUp() {
                 <Typography component="h1" variant="h5">
                     Sign up
                 </Typography>
+                { auth.signUpError.general.isError ? (
+                    <Alert severity="error" className={classes.generalError}>{ auth.signUpError.general.message }</Alert>
+                ) : null}
                 <form className={classes.form} noValidate>
                     <NotesTextField
                         value={email}
