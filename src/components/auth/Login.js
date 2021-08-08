@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useFormValue } from "../../hooks";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
+import { resetSignInEmailError, resetSignInPasswordError } from "../../slices/auth";
 import { login } from "../../thunks/auth";
 import { getAuth } from "../../selectors";
 import {
@@ -61,6 +62,15 @@ function Login() {
     }
 
     useEffect(() => {
+        if(auth.signInError.email.isError) {
+            dispatch(resetSignInEmailError());
+        } else if(auth.signInError.password.isError) {
+            dispatch(resetSignInPasswordError());
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch]);
+
+    useEffect(() => {
         if(auth.isAuthenticated) {
             history.replace(from);
         }
@@ -82,13 +92,18 @@ function Login() {
                         onValueChange={handleOnEmailChange}
                         label="Email Address"
                         name="email"
+                        error={auth.signInError.email.isError}
+                        helperText={auth.signInError.email.message}
                         autoComplete="email"
+                        autoFocus
                     />
                     <NotesTextField
                         value={password}
                         onValueChange={handleOnPasswordChange}
                         label="Password"
                         name="password"
+                        error={auth.signInError.password.isError}
+                        helperText={auth.signInError.password.message}
                         autoComplete="current-password"
                         type="password"
                     />

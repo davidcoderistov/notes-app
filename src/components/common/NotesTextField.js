@@ -10,7 +10,10 @@ function NotesTextField(props) {
         name,
         label,
         autoComplete,
-        type
+        autoFocus,
+        type,
+        error,
+        helperText
     } = props;
     return (
         <TextField
@@ -23,7 +26,9 @@ function NotesTextField(props) {
             name={name || 'Default name'}
             autoComplete={autoComplete || 'autocomplete'}
             type={type || ''}
-            autoFocus
+            autoFocus={autoFocus}
+            error={error}
+            helperText={helperText ? helperText : ''}
             value={value}
             onChange={onValueChange}
         />
