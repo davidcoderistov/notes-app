@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useFormValue } from "../../hooks";
-import { authAPI } from "../../api/auth";
+import { signup } from "../../thunks/auth";
+import { resetSignUpEmailError, resetSignUpPasswordError } from "../../slices/auth";
 import {
     NotesTextField,
     NotesButton,
     Copyright
 } from "../common";
 import { NotesLink } from "../router";
+import { getAuth } from "../../selectors";
 import {
     Avatar,
     Grid,
@@ -46,27 +49,39 @@ function SignUp() {
     const [email, handleOnEmailChange] = useFormValue('');
     const [password, handleOnPasswordChange] = useFormValue('');
 
-    const [loading, setLoading] = useState(false);
+    const auth = useSelector(getAuth);
 
+    const dispatch = useDispatch();
     const history = useHistory();
 
-    function clearState() {
-        setLoading(false);
+    useEffect(() => {
+        if(auth.signUpError.email.isError) {
+            dispatch(resetSignUpEmailError());
+        } else if(auth.signUpError.password.isError) {
+            dispatch(resetSignUpPasswordError());
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch]);
+
+    const clearState = () => {
         handleOnEmailChange('');
         handleOnPasswordChange('');
-    }
+    };
 
-    function handleOnSignUpClick(event) {
+    const handleOnSignUpClick = event => {
         event.preventDefault();
         event.stopPropagation();
-        setLoading(true);
-        authAPI.signup(email, password)
-            .then(() => {
-                clearState();
-                history.push('/login');
-            })
-            .catch(clearState)
-    }
+        dispatch(signup({
+            email,
+            password,
+            onSuccess: handleOnSignUpSuccess,
+        }));
+    };
+
+    const handleOnSignUpSuccess = () => {
+        clearState();
+        history.push('/login');
+    };
 
     return (
         <Container component="main" maxWidth="xs">
@@ -86,6 +101,8 @@ function SignUp() {
                         name="email"
                         autoComplete="email"
                         autoFocus
+                        error={auth.signUpError.email.isError}
+                        helperText={auth.signUpError.email.message}
                     />
                     <NotesTextField
                         value={password}
@@ -94,6 +111,8 @@ function SignUp() {
                         name="password"
                         autoComplete="current-password"
                         type="password"
+                        error={auth.signUpError.password.isError}
+                        helperText={auth.signUpError.password.message}
                     />
                     <NotesButton
                         type="submit"
@@ -101,7 +120,7 @@ function SignUp() {
                         variant="contained"
                         color="primary"
                         className={classes.submit}
-                        loading={loading}
+                        loading={auth.loading}
                         onClick={handleOnSignUpClick}
                     >
                         Sign Up

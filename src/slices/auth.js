@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { login } from "../thunks/auth";
+import { login, signup } from "../thunks/auth";
 
 export const initialState = {
     currentUser: {},
@@ -7,6 +7,10 @@ export const initialState = {
     signInError: {
         email: {},
         password: {}
+    },
+    signUpError: {
+        email: {},
+        password: {},
     },
     loading: false,
 };
@@ -20,6 +24,12 @@ const authSlice = createSlice({
         },
         resetSignInPasswordError: state => {
             state.signInError.password = {};
+        },
+        resetSignUpEmailError: state => {
+            state.signUpError.email = {};
+        },
+        resetSignUpPasswordError: state => {
+            state.signUpError.password = {};
         }
     },
     extraReducers: {
@@ -55,12 +65,44 @@ const authSlice = createSlice({
             state.isAuthenticated = false;
             state.loading = false;
         },
+
+        [signup.pending]: state => {
+            state.loading = true;
+            state.signUpError = {
+                email: {},
+                password: {},
+            };
+        },
+
+        [signup.fulfilled]: state => {
+            state.loading = false;
+            state.signUpError = {
+                email: {},
+                password: {},
+            };
+        },
+
+        [signup.rejected]: (state, { payload }) => {
+            const { error } = payload;
+            if(error.code) {
+                if(error.code === 'auth/email-already-in-use' || error.code === 'auth/invalid-email' || error.code === 'auth/operation-not-allowed') {
+                    state.signUpError.email.isError = true;
+                    state.signUpError.email.message = error.message;
+                } else if(error.code === 'auth/weak-password') {
+                    state.signUpError.password.isError = true;
+                    state.signUpError.password.message = error.message;
+                }
+            }
+            state.loading = false;
+        },
     }
 });
 
 export const {
     resetSignInEmailError,
-    resetSignInPasswordError
+    resetSignInPasswordError,
+    resetSignUpEmailError,
+    resetSignUpPasswordError
 } = authSlice.actions;
 
 export default authSlice.reducer;

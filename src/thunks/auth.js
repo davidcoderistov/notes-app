@@ -17,4 +17,17 @@ const login = createAsyncThunk(
     }
 );
 
-export { login }
+const signup = createAsyncThunk(
+    'auth/signup',
+    async ({email, password, onSuccess}, { rejectWithValue }) => {
+        try {
+            await authAPI.signup(email, password);
+            onSuccess();
+        } catch(error) {
+            const { code, message } = error;
+            return rejectWithValue({ error: { code, message } });
+        }
+    }
+);
+
+export { login, signup }
