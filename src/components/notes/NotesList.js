@@ -67,8 +67,8 @@ function Note({ index, style, payload }) {
                         </Avatar>
                     </ListItemAvatar>
                     <ListItemText
-                        primary={note.title}
-                        secondary={note.content}
+                        primary={note.title.length > 22 ? note.title.substring(0, 22) : note.title}
+                        secondary={note.content.length > 22 ? `${note.content.substring(0, 22)}...`  : note.content}
                     />
                     { note.status === 'favorite' ? (
                         <ListItemSecondaryAction>
