@@ -122,11 +122,6 @@ function Login() {
                         Sign In
                     </NotesButton>
                     <Grid container>
-                        <Grid item xs>
-                            <NotesLink to="/">
-                                {"Forgot password?"}
-                            </NotesLink>
-                        </Grid>
                         <Grid item>
                             <NotesLink to="/signup">
                                 {"Don't have an account? Sign Up"}
